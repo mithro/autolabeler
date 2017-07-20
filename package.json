@@ -1,0 +1,28 @@
+{
+  "name": "probot-labeler",
+  "version": "1.0.0",
+  "description": "{{{ description }}}",
+  "author": "Brandon Keepers",
+  "license": "ISC",
+  "repository": "https://github.com/probot/labeler.git",
+  "scripts": {
+    "start": "probot run ./index.js",
+    "test": "mocha && xo --extend probot"
+  },
+  "dependencies": {
+    "js-yaml": "^3.9.0",
+    "minimatch": "^3.0.4",
+    "probot": "^0.7.5"
+  },
+  "devDependencies": {
+    "eslint-config-probot": ">=0.1.0",
+    "expect": "^1.20.2",
+    "localtunnel": "^1.8.2",
+    "mocha": "^3.2.0",
+    "xo": "^0.18.0"
+  },
+  "engines": {
+    "node": ">= 7.7.0",
+    "npm": ">= 4.0.0"
+  }
+}

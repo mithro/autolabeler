@@ -33,7 +33,8 @@ describe('autolabeler', () => {
       pullRequests: {
         getFiles: expect.createSpy().andReturn({
           data: [
-            {filename: 'test.txt'}
+            {filename: 'test.txt'},
+            {filename: '.github/autolabeler.yml'}
           ]
         })
       },
@@ -63,7 +64,7 @@ describe('autolabeler', () => {
         owner: 'robotland',
         repo: 'test',
         number: 98,
-        labels: ['test']
+        labels: ['test', 'config']
       });
     });
   });

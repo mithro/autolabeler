@@ -10,8 +10,8 @@
     "test": "mocha && xo --extend probot"
   },
   "dependencies": {
+    "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "minimatch": "^3.0.4",
     "probot": "^0.7.5"
   },
   "devDependencies": {

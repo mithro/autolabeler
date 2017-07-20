@@ -1,5 +1,5 @@
 const yaml = require('js-yaml');
-const minimatch = require('minimatch');
+const ignore = require('ignore');
 
 module.exports = robot => {
   robot.on('pull_request.opened', autolabel);
@@ -19,17 +19,9 @@ module.exports = robot => {
     // eslint-disable-next-line guard-for-in
     for (const label in config) {
       robot.log('looking for changes', label, config[label]);
+      const matcher = ignore().add(config[label]);
 
-      const matches = [].concat(config[label]).find(glob => {
-        robot.log('comparing', glob, changedFiles);
-        return changedFiles.find(file => {
-          robot.log('matching', file, glob, minimatch(file, glob));
-          return minimatch(file, glob);
-        });
-      });
-
-      if (matches) {
-        robot.log('adding label', label);
+      if (changedFiles.find(file => matcher.ignores(file))) {
         labels.add(label);
       }
     }

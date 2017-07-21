@@ -9,7 +9,7 @@ module.exports = robot => {
     const content = await context.github.repos.getContent(context.repo({
       path: '.github/autolabeler.yml'
     }));
-    const config = yaml.load(Buffer.from(content.data.content, 'base64').toString());
+    const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString());
 
     const files = await context.github.pullRequests.getFiles(context.issue());
     const changedFiles = files.data.map(file => file.filename);

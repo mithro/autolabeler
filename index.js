@@ -6,6 +6,7 @@ module.exports = robot => {
   robot.on('issues', prComments);
 
   async function prComments(context) {
+      robot.log('issues notification received');
       var pr = await context.github.pullRequests.get(context.issue());
       robot.log(pr);
       robot.log(pr.data.body);

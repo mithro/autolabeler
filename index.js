@@ -5,7 +5,7 @@ module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
   // robot.on('pull_request.synchronize', autolabel);
   robot.on('pull_request', general);
-  robot.on('issue', issueHandle);
+  robot.on('issues', issueHandle);
 
   async function issueHandle(context) {
       console.log('issue handled');

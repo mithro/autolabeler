@@ -3,11 +3,11 @@ const ignore = require('ignore');
 
 module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
-  robot.on('issues.pull_request', prComments);
+  robot.on('issues', prComments);
 
   async function prComments(context) {
-      robot.log("context.issue(): "+context.issue());
       var pr = await context.github.pullRequests.get(context.issue());
+      robot.log(pr);
       robot.log(pr.data.body);
   }
   // robot.on('pull_request.synchronize', autolabel);

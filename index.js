@@ -14,8 +14,8 @@ module.exports = robot => {
   }
 
   async function simpleFlag(context) {
-      var pullRequest = await context.github.pullRequest.get(context.issue());
-      robot.log(pullRequest);
+      var pr = await context.github.pullRequests.get(context.issue());
+      robot.log(pr);
   }
 
   //automatically labels prs based on files contained

@@ -54,7 +54,7 @@ module.exports = robot => {
   async function initialCheck(context) {
       robot.log(initialCheck);
 
-      var pr = context.github.pullRequest.get(context.issue());
+      var pr = context.github.pullRequests.get(context.issue());
 
       var body = pr.data.body;
 

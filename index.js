@@ -36,13 +36,13 @@ module.exports = robot => {
 
   //automatically labels a pr for its current state to allow progress tracking
   async function initialCheck(context) {
-      console.log('initialCheck has been called')
+      robot.log('initialCheck has been called')
       //get the body of the pull request
       //check if the body contains a author checklist
       //if not -> 'NEEDS: AUTHORCHECKLIST', else -> 'NEEDS: REVIEWERCHECKLIST'
       var pullrequest = context.github.pullRequest.get(context.issue());
       if (pullrequest) {
-          console.log("we have a pullrequest :\n"+ pullrequest );
+          robot.log("we have a pullrequest");
       }
       //this depends on if we can or can't get access to the body directly.
 
@@ -66,6 +66,7 @@ module.exports = robot => {
   }
 
   async function general(context) {
+      robot.log('general has been called')
       robot.log(context.issue());
       console.log(context.issue());
   }

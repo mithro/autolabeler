@@ -16,6 +16,10 @@ module.exports = robot => {
   async function simpleFlag(context) {
       var pr = await context.github.pullRequests.get(context.issue());
       robot.log(pr.data.body);
+      var responseLabel = await context.github.issues.addLabels(context.issue({
+          labels: ["Needs: Author Checklist"]
+      }))
+      robot.log(responseLabel);
   }
 
   //automatically labels prs based on files contained

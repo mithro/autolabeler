@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const ignore = require('ignore');
 
 module.exports = robot => {
-  robot.on('pull_request.opened', simpleFlag);
+  robot.on('pull_request.opened', initialCheck);
   // robot.on('pull_request.synchronize', autolabel);
   //robot.on('pull_request', general);
   //robot.on('issues', issueHandle);
@@ -52,19 +52,11 @@ module.exports = robot => {
 
   //automatically labels a pr for its current state to allow progress tracking
   async function initialCheck(context) {
-      robot.log('initialCheck has been called')
-    //   robot.log(context);
-      //get the body of the pull request
-      //check if the body contains a author checklist
-      //if not -> 'NEEDS: AUTHORCHECKLIST', else -> 'NEEDS: REVIEWERCHECKLIST'
-      var pullrequest = context.github.pullRequest.get(context.issue());
-      if (pullrequest) {
-          robot.log("we have a pullrequest");
-      }
-      //this depends on if we can or can't get access to the body directly.
+      robot.log(initialCheck);
 
-      //not sure if this will work
-      var body = pullrequest.body;
+      var pr = context.github.pullRequest.get(context.issue());
+
+      var body = pr.data.body;
 
       if (!body.includes('Author Checklist')) {
           return context.github.issues.addLabels(

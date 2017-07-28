@@ -44,7 +44,7 @@ module.exports = robot => {
   //automatically labels a pr for its current state to allow progress tracking
   async function initialCheck(context) {
       robot.log('initialCheck has been called')
-      robot.log(context);
+    //   robot.log(context);
       //get the body of the pull request
       //check if the body contains a author checklist
       //if not -> 'NEEDS: AUTHORCHECKLIST', else -> 'NEEDS: REVIEWERCHECKLIST'

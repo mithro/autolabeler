@@ -2,15 +2,13 @@ const yaml = require('js-yaml');
 const ignore = require('ignore');
 
 module.exports = robot => {
-  robot.on('pull_request.opened', autolabel);
-  robot.on('pull_request.synchronize', autolabel);
+  robot.on('pull_request.opened', initialCheck);
+  // robot.on('pull_request.synchronize', autolabel);
+  robot.on('pull_request', general);
 
+  //automatically labels prs based on files contained
   async function autolabel(context) {
-    const content = await context.github.repos.getContent(context.repo({
-      path: '.github/autolabeler.yml'
-    }));
-    const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString());
-
+    const config = context.config('autolabeler.yml');
     const files = await context.github.pullRequests.getFiles(context.issue());
     const changedFiles = files.data.map(file => file.filename);
 
@@ -34,5 +32,41 @@ module.exports = robot => {
         labels: labelsToAdd
       }));
     }
+  }
+
+  //automatically labels a pr for its current state to allow progress tracking
+  async function initialCheck(context) {
+      console.log('initialCheck has been called')
+      //get the body of the pull request
+      //check if the body contains a author checklist
+      //if not -> 'NEEDS: AUTHORCHECKLIST', else -> 'NEEDS: REVIEWERCHECKLIST'
+      var pullrequest = context.github.pullRequest.get(context.issue());
+      if (pullrequest) {
+          console.log("we have a pullrequest :\n"+ pullrequest );
+      }
+      //this depends on if we can or can't get access to the body directly.
+
+      //not sure if this will work
+      var body = pullrequest.body;
+
+      if (!body.includes('Author Checklist')) {
+          return context.github.issues.addLabels(
+              context.issue({
+                  labels: ['Needs: Author Checklist']
+              })
+          );
+      }
+      else if(body.includes('Author Checklist')) {
+          return context.github.issues.addLabels(
+              context.issue({
+                  labels: ['Needs: Reviewer Checklist']
+              })
+          );
+      }
+  }
+
+  async function general(context) {
+      robot.log(context.issue());
+      console.log(context.issue());
   }
 };

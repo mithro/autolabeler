@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const ignore = require('ignore');
 
 module.exports = robot => {
-  robot.on('pull_request.opened', initialCheck);
+  robot.on('pull_request.opened', simpleFlag);
   // robot.on('pull_request.synchronize', autolabel);
   //robot.on('pull_request', general);
   //robot.on('issues', issueHandle);
@@ -10,6 +10,10 @@ module.exports = robot => {
   async function issueHandle(context) {
       console.log('issue handled');
       robot.log("test");
+      robot.log(context);
+  }
+
+  async function simpleFlag(context) {
       robot.log(context);
   }
 

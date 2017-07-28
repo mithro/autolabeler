@@ -8,8 +8,9 @@ module.exports = robot => {
   robot.on('issue', issueHandle);
 
   async function issueHandle(context) {
-      robot.log.warn("test");
-      robot.log.warn(context);
+      console.log('issue handled');
+      robot.log("test");
+      robot.log(context);
   }
 
   //automatically labels prs based on files contained

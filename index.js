@@ -5,6 +5,12 @@ module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
   // robot.on('pull_request.synchronize', autolabel);
   robot.on('pull_request', general);
+  robot.on('issue', issueHandle);
+
+  async function issueHandle(context) {
+      robot.log("test");
+      robot.log(context);
+  }
 
   //automatically labels prs based on files contained
   async function autolabel(context) {

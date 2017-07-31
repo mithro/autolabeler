@@ -4,9 +4,14 @@ const ignore = require('ignore');
 module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
   robot.on('issues', prComments);
+  robot.on('issue_comment', issueComment);
 
-  async function prComments(event, context) {
-      robto.log(event);
+  async function issueComment(context) {
+      robot.log('issue commment received');
+      robot.log(context.issue());
+  }
+
+  async function prComments(context) {
       robot.log('issue notification received');
       var pr = await context.github.pullRequests.get(context.issue());
       robot.log(pr);

@@ -9,6 +9,14 @@ module.exports = robot => {
   async function issueComment(context) {
       robot.log('issue commment received');
       robot.log(context.issue());
+      var issue = await context.github.issues.get(context.issue());
+      robot.log(issue);
+    //   if(context.issue.pull_request !== undefined){
+    //       robot.log(context.issue.pull_request);
+    //   }
+    //   else {
+    //       robot.log('not a pull_request');
+    //   }
   }
 
   async function prComments(context) {

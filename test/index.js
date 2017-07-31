@@ -11,16 +11,17 @@ frontend: ["*.js"]
 describe('autolabeler', () => {
   let robot;
   let github;
+  beforeEach(() =>{
+      // Create a new Robot to run our plugin
+      robot = createRobot();
 
-  describe('pull_request.opened event', () => {
+      // Load the plugin
+      plugin(robot);
+  })
+
+  describe('pull_request.opened event triggered', () => {
     it('adds \'Needs: Author Checklist\' label if no Author Checklist exists in body of PR', async () => {
         const event_needsauthorcl = require('./fixtures/pull_request.opened.noauthorchecklist');
-
-        // Create a new Robot to run our plugin
-        robot = createRobot();
-
-        // Load the plugin
-        plugin(robot);
 
         // Mock out the GitHub API
         github = {
@@ -57,12 +58,6 @@ describe('autolabeler', () => {
     it('adds \'Needs: Reviewer Checklist\' label if Author Checklist exists in body of PR', async () => {
         const event_needsreviewercl = require('./fixtures/pull_request.opened.hasauthorchecklist');
 
-        // Create a new Robot to run our plugin
-        robot = createRobot();
-
-        // Load the plugin
-        plugin(robot);
-
         // Mock out the GitHub API
         github = {
           pullRequests: {
@@ -91,9 +86,25 @@ describe('autolabeler', () => {
     })
   });
 
-  describe('issue event triggered', () => {
-      it('does nothing', async () => {
-          
-      })
+  describe('issue_comment event triggered', () => {
+      it('ignores the \'non-pr\' issue comments', async () => {
+          const event_issue_comment = require('./fixtures/issue_comment.issue.created');
+          robot.log = expect.createSpy();
+          expect(robot.log).toHaveBeenCalledWith(
+              'not a pull_request'
+          );
+      });
+      it('logs the body of pr comments', async () => {
+          const event_pr_issue_comment = require('./fixtures/issue_comment.pr.created');
+          robot.log = expect.createSpy();
+          expect(robot.log).toHaveBeenCalledWith(
+              {
+                "url": "https://api.github.com/repos/luisschubert/webhookTest/pulls/27",
+                "html_url": "https://github.com/luisschubert/webhookTest/pull/27",
+                "diff_url": "https://github.com/luisschubert/webhookTest/pull/27.diff",
+                "patch_url": "https://github.com/luisschubert/webhookTest/pull/27.patch"
+              }
+          );
+      });
   })
 });

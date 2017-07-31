@@ -94,8 +94,24 @@ describe('autolabeler', () => {
               'not a pull_request'
           );
       });
-      it('logs the body of pr comments', async () => {
+      it('logs the body of pr comment', async () => {
           const event_pr_issue_comment = require('./fixtures/issue_comment.pr.created');
+
+          // Mock out the GitHub API
+          github = {
+            issues: {
+              get: expect.createSpy().andReturn({
+
+              })
+            }
+          };
+
+          // Mock out GitHub App authentication and return our mock client
+          robot.auth = () => Promise.resolve(github);
+
+
+          await robot.receive(event_needsreviewercl);
+
           robot.log = expect.createSpy();
           expect(robot.log).toHaveBeenCalledWith(
               {

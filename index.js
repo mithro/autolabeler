@@ -9,7 +9,7 @@ module.exports = robot => {
   async function issueComment(context) {
       robot.log('issue commment received');
       robot.log(context.issue());
-      var issue = await context.github.issues.get(context.issue());
+      var issue = await context.github.issue_comment.get(context.issue());
       robot.log(issue);
     //   if(context.issue.pull_request !== undefined){
     //       robot.log(context.issue.pull_request);

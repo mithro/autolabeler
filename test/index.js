@@ -12,60 +12,88 @@ describe('autolabeler', () => {
   let robot;
   let github;
 
-  beforeEach(() => {
-    // Create a new Robot to run our plugin
-    robot = createRobot();
-
-    // Load the plugin
-    plugin(robot);
-
-    // Mock out the GitHub API
-    github = {
-      repos: {
-        // Response for getting content from '.github/ISSUE_REPLY_TEMPLATE.md'
-        getContent: expect.createSpy().andReturn(Promise.resolve({
-          data: {
-            content: Buffer.from(config).toString('base64')
-          }
-        }))
-      },
-
-      pullRequests: {
-        getFiles: expect.createSpy().andReturn({
-          data: [
-            {filename: 'test.txt'},
-            {filename: '.github/autolabeler.yml'}
-          ]
-        })
-      },
-
-      issues: {
-        addLabels: expect.createSpy()
-      }
-    };
-
-    // Mock out GitHub App authentication and return our mock client
-    robot.auth = () => Promise.resolve(github);
-  });
-
   describe('pull_request.opened event', () => {
-    const event = require('./fixtures/pull_request.opened');
+    it('adds \'Needs: Author Checklist\' label if no Author Checklist exists in body of PR', async () => {
+        const event_needsauthorcl = require('./fixtures/pull_request.opened.noauthorchecklist');
 
-    it('adds label', async () => {
-      await robot.receive(event);
+        // Create a new Robot to run our plugin
+        robot = createRobot();
 
-      expect(github.repos.getContent).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        path: '.github/autolabeler.yml'
-      });
+        // Load the plugin
+        plugin(robot);
 
-      expect(github.issues.addLabels).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        number: 98,
-        labels: ['test', 'config']
-      });
+        // Mock out the GitHub API
+        github = {
+          pullRequests: {
+            get: expect.createSpy().andReturn({
+                data: event_needsauthorcl.payload.pull_request
+            })
+          },
+
+          issues: {
+            addLabels: expect.createSpy()
+          }
+        };
+
+        // Mock out GitHub App authentication and return our mock client
+        robot.auth = () => Promise.resolve(github);
+
+        await robot.receive(event_needsauthorcl);
+
+        // expect(github.repos.getContent).toHaveBeenCalledWith({
+        //     owner: 'robotland',
+        //     repo: 'test',
+        //     path: '.github/autolabeler.yml'
+        // });
+
+        expect(github.issues.addLabels).toHaveBeenCalledWith({
+            owner: 'robotland',
+            repo: 'test',
+            number: 98,
+            labels: ['Needs: Author Checklist']
+        });
     });
+
+    it('adds \'Needs: Reviewer Checklist\' label if Author Checklist exists in body of PR', async () => {
+        const event_needsreviewercl = require('./fixtures/pull_request.opened.hasauthorchecklist');
+
+        // Create a new Robot to run our plugin
+        robot = createRobot();
+
+        // Load the plugin
+        plugin(robot);
+
+        // Mock out the GitHub API
+        github = {
+          pullRequests: {
+            get: expect.createSpy().andReturn({
+                data: event_needsreviewercl.payload.pull_request
+            })
+          },
+
+          issues: {
+            addLabels: expect.createSpy()
+          }
+        };
+
+        // Mock out GitHub App authentication and return our mock client
+        robot.auth = () => Promise.resolve(github);
+
+
+        await robot.receive(event_needsreviewercl);
+
+        expect(github.issues.addLabels).toHaveBeenCalledWith({
+          owner: 'robotland',
+          repo: 'test',
+          number: 98,
+          labels: ['Needs: Reviewer Checklist']
+        });
+    })
   });
+
+  describe('issue event triggered', () => {
+      it('does nothing', async () => {
+          
+      })
+  })
 });

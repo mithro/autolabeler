@@ -3,7 +3,7 @@ const ignore = require('ignore');
 
 module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
-  robot.on('issue', prComments);
+  robot.on('issues', prComments);
 
   async function prComments(context) {
       robot.log('issue notification received');

@@ -5,7 +5,8 @@ module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
   robot.on('issues', prComments);
 
-  async function prComments(context) {
+  async function prComments(event, context) {
+      robto.log(event);
       robot.log('issue notification received');
       var pr = await context.github.pullRequests.get(context.issue());
       robot.log(pr);

@@ -7,14 +7,13 @@ module.exports = robot => {
 
   async function issueComment(context) {
       robot.log('issue commment received');
-      robot.log(context.payload.issue);
-      //var issue = await context.github.issue_comment.get(context.issue());
-      var issueComments = await context.github.issues.getComments(context.issue());
-      console.log(issueComments);
-    //   if (issue.data.payload.issue.pull_request !== undefined) {
-    //       console.log('THIS IS FROM A PR');
-    //   }
-    //   robot.log(issue);
+      if (context.payload.issue.pull_request !== undefined) {
+          console.log('THIS IS A PULL REQUEST COMMENT');
+          var issueComments = await context.github.issues.getComments(context.issue());
+      }
+      else {
+          console.log('THIS IS AN ISSUE COMMENT');
+      }
   }
 
   async function initialCheck(context) {

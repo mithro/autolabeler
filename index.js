@@ -26,12 +26,12 @@ module.exports = robot => {
             var authorChecklistInBody = comment.body.includes('Author Checklist');
             var hasNeedsAuthorChecklistLabel;
             var tempArr = labels.filter(function(label){
-                label.name == "Needs: Author Checklist"
+                label.name === "Needs: Author Checklist"
             })
             if (tempArr.length > 0){
                 hasNeedsAuthorChecklistLabel = true;
             }else{
-                false;
+                hasNeedsAuthorChecklistLabel = false;
             }
             robot.log('labels:' + JSON.stringify(labels));
             robot.log('prAuthor: '+ prAuthor);

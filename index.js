@@ -16,10 +16,16 @@ module.exports = robot => {
             var labels = context.payload.issue.labels;
             var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
-            robot.log()
-            if (labels.includes(needsAuthorChecklistLabel) &&
+            var authorChecklistInBody = comment.body.includes('Author Checklist');
+            var hasNeedsAuthorChecklistLabel = labels.includes(needsAuthorChecklistLabel);
+            robot.log('lables:' + lables);
+            robot.log('prAuthor: '+ prAuthor);
+            robot.log('commentAuthor: '+ commentAuthor);
+            robot.log('author checklist in body: '+ authorChecklistInBody);
+            if (hasNeedsAuthorChecklistLabel &&
                 prAuthor === commentAuthor &&
-                comment.body.includes('Author Checklist')) {
+                authorChecklistInBody) {
+                    robot.log('removing needs author checklist');
                 return await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Author Checklist'

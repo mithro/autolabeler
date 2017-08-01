@@ -9,10 +9,11 @@ module.exports = robot => {
             var labels = context.payload.issue.labels;
             var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
+            robot.log()
             if (labels.includes('Needs: Author Checklist') &&
                 prAuthor === commentAuthor &&
                 comment.body.includes('Author Checklist')) {
-                await context.github.issues.removeLabel(
+                return await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Author Checklist'
                     })
@@ -21,7 +22,7 @@ module.exports = robot => {
             if (labels.includes('Needs: Reviewer Checklist') &&
                 prAuthor !== commentAuthor &&
                 comment.body.includes('Reviewer Checklist')) {
-                await context.github.issues.removeLabel(
+                return await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Reviewer Checklist'
                     })

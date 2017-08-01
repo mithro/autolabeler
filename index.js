@@ -7,7 +7,7 @@ module.exports = robot => {
             robot.log('THIS IS A PR COMMENT');
             var prAuthor = context.payload.issue.user.login;
             var labels = context.payload.issue.labels;
-            var comment = context.payload.issue.comment;
+            var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
             if (labels.includes('Needs: Author Checklist') &&
                 prAuthor === commentAuthor &&

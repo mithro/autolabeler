@@ -22,6 +22,7 @@ module.exports = robot => {
             robot.log('prAuthor: '+ prAuthor);
             robot.log('commentAuthor: '+ commentAuthor);
             robot.log('author checklist in body: '+ authorChecklistInBody);
+            robot.log('hasNeedsAuthorChecklistLabel: ' + hasNeedsAuthorChecklistLabel);
             if (hasNeedsAuthorChecklistLabel &&
                 prAuthor === commentAuthor &&
                 authorChecklistInBody) {

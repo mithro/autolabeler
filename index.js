@@ -7,7 +7,7 @@ module.exports = robot => {
 
   async function issueComment(context) {
       robot.log('issue commment received');
-      robot.log(context.issue);
+      robot.log(context.payload.issue);
       //var issue = await context.github.issue_comment.get(context.issue());
       var issueComments = await context.github.issues.getComments(context.issue());
       console.log(issueComments);

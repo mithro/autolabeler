@@ -6,6 +6,13 @@ module.exports = robot => {
         if (context.payload.issue.pull_request !== undefined) {
             robot.log('THIS IS A PR COMMENT');
             var needsAuthorChecklistLabel = {
+                "id": 654876885,
+                "url": "https://api.github.com/repos/luisschubert/webhookTest/labels/Needs:%20Author%20Checklist",
+                "name": "Needs: Author Checklist",
+                "color": "d93f0b",
+                "default": false
+            }
+            var needsReviewerChecklistLabel = {
                 "id": 654877075,
                 "url": "https://api.github.com/repos/luisschubert/webhookTest/labels/Needs:%20Reviewer%20Checklist",
                 "name": "Needs: Reviewer Checklist",

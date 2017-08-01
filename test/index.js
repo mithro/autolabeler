@@ -86,50 +86,49 @@ describe('autolabeler', () => {
 
           // Mock out the GitHub API
           github = {
-            issue_comment: {
-              get: expect.createSpy().andReturn({
-                  data: event_issue_comment
-              })
+            issues: {
+              getComments: expect.createSpy().andReturn(
+                 {"comment1": "luis"}
+              )
             }
           };
+
+          robot.log = expect.createSpy();
 
           // Mock out GitHub App authentication and return our mock client
           robot.auth = () => Promise.resolve(github);
 
           await robot.receive(event_issue_comment);
 
-          robot.log = expect.createSpy();
           expect(robot.log).toHaveBeenCalledWith(
-              'not a pull_request'
+              'THIS IS AN ISSUE COMMENT'
           );
+          
       });
       it('logs the body of pr comment', async () => {
           const event_pr_issue_comment = require('./fixtures/issue_comment.pr.created');
 
           // Mock out the GitHub API
           github = {
-            issue_comment: {
-              get: expect.createSpy().andReturn({
-                  data: event_pr_issue_comment
-              })
+            issues: {
+              getComments: expect.createSpy().andReturn(
+                  {"comment1": "hello luis"}
+              )
             }
           };
+
+          robot.log = expect.createSpy();
 
           // Mock out GitHub App authentication and return our mock client
           robot.auth = () => Promise.resolve(github);
 
-
           await robot.receive(event_pr_issue_comment);
 
-          robot.log = expect.createSpy();
           expect(robot.log).toHaveBeenCalledWith(
-              {
-                "url": "https://api.github.com/repos/luisschubert/webhookTest/pulls/27",
-                "html_url": "https://github.com/luisschubert/webhookTest/pull/27",
-                "diff_url": "https://github.com/luisschubert/webhookTest/pull/27.diff",
-                "patch_url": "https://github.com/luisschubert/webhookTest/pull/27.patch"
-              }
+              'THIS IS A PULL REQUEST COMMENT'
           );
+
+
       });
   })
 });

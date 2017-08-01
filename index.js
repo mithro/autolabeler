@@ -5,12 +5,19 @@ module.exports = robot => {
     async function issueComment(context) {
         if (context.payload.issue.pull_request !== undefined) {
             robot.log('THIS IS A PR COMMENT');
+            var needsAuthorChecklistLabel = {
+                "id": 654877075,
+                "url": "https://api.github.com/repos/luisschubert/webhookTest/labels/Needs:%20Reviewer%20Checklist",
+                "name": "Needs: Reviewer Checklist",
+                "color": "1d76db",
+                "default": false
+            }
             var prAuthor = context.payload.issue.user.login;
             var labels = context.payload.issue.labels;
             var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
             robot.log()
-            if (labels.includes('Needs: Author Checklist') &&
+            if (labels.includes(needsAuthorChecklistLabel) &&
                 prAuthor === commentAuthor &&
                 comment.body.includes('Author Checklist')) {
                 return await context.github.issues.removeLabel(

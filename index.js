@@ -25,7 +25,7 @@ module.exports = robot => {
             var commentAuthor = comment.user.login;
             var authorChecklistInBody = comment.body.includes('Author Checklist');
             var hasNeedsAuthorChecklistLabel = labels.includes(needsAuthorChecklistLabel);
-            robot.log('labels:' + json.stringify(labels);
+            robot.log('labels:' + json.stringify(labels));
             robot.log('prAuthor: '+ prAuthor);
             robot.log('commentAuthor: '+ commentAuthor);
             robot.log('author checklist in body: '+ authorChecklistInBody);

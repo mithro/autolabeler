@@ -24,7 +24,15 @@ module.exports = robot => {
             var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
             var authorChecklistInBody = comment.body.includes('Author Checklist');
-            var hasNeedsAuthorChecklistLabel = labels.includes(needsAuthorChecklistLabel);
+            var hasNeedsAuthorChecklistLabel;
+            var tempArr = labels.filter(function(label){
+                label.name == "Needs: Author Checklist")
+            })
+            if (tempArr.length > 0){
+                hasNeedsAuthorChecklistLabel = true;
+            }else{
+                false;
+            }
             robot.log('labels:' + JSON.stringify(labels));
             robot.log('prAuthor: '+ prAuthor);
             robot.log('commentAuthor: '+ commentAuthor);

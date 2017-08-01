@@ -3,76 +3,19 @@ const ignore = require('ignore');
 
 module.exports = robot => {
   robot.on('pull_request.opened', initialCheck);
-  robot.on('issues', prComments);
   robot.on('issue_comment', issueComment);
 
   async function issueComment(context) {
       robot.log('issue commment received');
       robot.log(context.issue());
       var issue = await context.github.issue_comment.get(context.issue());
-      robot.log(issue);
-    //   if(context.issue.pull_request !== undefined){
-    //       robot.log(context.issue.pull_request);
-    //   }
-    //   else {
-    //       robot.log('not a pull_request');
-    //   }
-  }
-
-  async function prComments(context) {
-      robot.log('issue notification received');
-      var pr = await context.github.pullRequests.get(context.issue());
-      robot.log(pr);
-      robot.log(pr.data.body);
-  }
-  // robot.on('pull_request.synchronize', autolabel);
-  //robot.on('pull_request', general);
-  //robot.on('issues', issueHandle);
-
-  async function issueHandle(context) {
-      console.log('issue handled');
-      robot.log("test");
-      robot.log(context);
-  }
-
-  async function simpleFlag(context) {
-      var pr = await context.github.pullRequests.get(context.issue());
-      robot.log(pr.data.body);
-      var responseLabel = await context.github.issues.addLabels(context.issue({
-          labels: ["Needs: Author Checklist"]
-      }))
-      robot.log(responseLabel);
-  }
-
-  //automatically labels prs based on files contained
-  async function autolabel(context) {
-    const config = context.config('autolabeler.yml');
-    const files = await context.github.pullRequests.getFiles(context.issue());
-    const changedFiles = files.data.map(file => file.filename);
-
-    const labels = new Set();
-
-    // eslint-disable-next-line guard-for-in
-    for (const label in config) {
-      robot.log('looking for changes', label, config[label]);
-      const matcher = ignore().add(config[label]);
-
-      if (changedFiles.find(file => matcher.ignores(file))) {
-        labels.add(label);
+      console.log(issue);
+      if (issue.data.payload.issue.pull_request !== undefined) {
+          console.log('THIS IS FROM A PR');
       }
-    }
-
-    const labelsToAdd = Array.from(labels);
-
-    robot.log('Adding labels', labelsToAdd);
-    if (labelsToAdd.length > 0) {
-      return context.github.issues.addLabels(context.issue({
-        labels: labelsToAdd
-      }));
-    }
+      robot.log(issue);
   }
 
-  //automatically labels a pr for its current state to allow progress tracking
   async function initialCheck(context) {
       robot.log(initialCheck);
 
@@ -94,11 +37,5 @@ module.exports = robot => {
               })
           );
       }
-  }
-
-  async function general(context) {
-      robot.log('general has been called')
-      robot.log(context.issue());
-      console.log(context.issue());
   }
 };

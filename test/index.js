@@ -41,12 +41,6 @@ describe('autolabeler', () => {
 
         await robot.receive(event_needsauthorcl);
 
-        // expect(github.repos.getContent).toHaveBeenCalledWith({
-        //     owner: 'robotland',
-        //     repo: 'test',
-        //     path: '.github/autolabeler.yml'
-        // });
-
         expect(github.issues.addLabels).toHaveBeenCalledWith({
             owner: 'robotland',
             repo: 'test',
@@ -89,6 +83,21 @@ describe('autolabeler', () => {
   describe('issue_comment event triggered', () => {
       it('ignores the \'non-pr\' issue comments', async () => {
           const event_issue_comment = require('./fixtures/issue_comment.issue.created');
+
+          // Mock out the GitHub API
+          github = {
+            issue_comment: {
+              get: expect.createSpy().andReturn({
+                  data: event_issue_comment
+              })
+            }
+          };
+
+          // Mock out GitHub App authentication and return our mock client
+          robot.auth = () => Promise.resolve(github);
+
+          await robot.receive(event_issue_comment);
+
           robot.log = expect.createSpy();
           expect(robot.log).toHaveBeenCalledWith(
               'not a pull_request'
@@ -99,9 +108,9 @@ describe('autolabeler', () => {
 
           // Mock out the GitHub API
           github = {
-            issues: {
+            issue_comment: {
               get: expect.createSpy().andReturn({
-
+                  data: event_pr_issue_comment
               })
             }
           };
@@ -110,7 +119,7 @@ describe('autolabeler', () => {
           robot.auth = () => Promise.resolve(github);
 
 
-          await robot.receive(event_needsreviewercl);
+          await robot.receive(event_pr_issue_comment);
 
           robot.log = expect.createSpy();
           expect(robot.log).toHaveBeenCalledWith(

@@ -3,7 +3,7 @@ module.exports = robot => {
     robot.on('issue_comment.created', issueCommentCreated);
     robot.on('issue_comment.edited', async context => {
         var nasa = context.github.orgs.getMembers({
-            name: 'nasa'
+            org: 'nasa'
         })
         console.log('normal printing:\n');
         console.log(JSON.stringify(nasa));

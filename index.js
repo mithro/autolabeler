@@ -1,6 +1,6 @@
 module.exports = robot => {
     robot.on('pull_request.opened', initialCheck);
-    robot.on('issue_comment', issueComment);
+    robot.on('issue_comment.created', issueComment);
 
     async function issueComment(context) {
         if (context.payload.issue.pull_request !== undefined) {

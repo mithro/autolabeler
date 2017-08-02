@@ -47,6 +47,11 @@ module.exports = robot => {
                         name: 'Needs: Author Checklist'
                     })
                 );
+                await context.github.issues.addLabels(
+                    context.issue({
+                        labels:['Needs: Reviewer Checklist']
+                    })
+                )
             }
             if (labels.includes('Needs: Reviewer Checklist') &&
                 prAuthor !== commentAuthor &&

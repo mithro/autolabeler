@@ -2,7 +2,7 @@ module.exports = robot => {
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);
     robot.on('issue_comment.edited', async context => {
-        var nasa = context.github.orgs.getMembers({
+        var nasa = await context.github.orgs.getMembers({
             org: 'nasa'
         })
         console.log('normal printing:\n');

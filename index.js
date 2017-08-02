@@ -1,6 +1,15 @@
 module.exports = robot => {
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);
+    robot.on('issue_comment.edited', async context => {
+        var nasa = context.github.orgs.getMembers({
+            name: 'nasa'
+        })
+        console.log('normal printing:\n');
+        console.log(JSON.stringify(nasa));
+        console.log('enhanced printing:\n');
+        console.log(JSON.stringify(nasa, null, "    "));
+    })
 
     async function issueCommentCreated(context) {
         if (context.payload.issue.pull_request !== undefined) {

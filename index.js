@@ -26,7 +26,7 @@ module.exports = robot => {
             var authorChecklistInBody = comment.body.includes('Author Checklist');
             var hasNeedsAuthorChecklistLabel;
             var tempArr = labels.filter(function(label){
-                label.name === "Needs: Author Checklist"
+                return label.name === "Needs: Author Checklist"
             })
             if (tempArr.length > 0){
                 hasNeedsAuthorChecklistLabel = true;

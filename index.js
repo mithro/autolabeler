@@ -56,9 +56,14 @@ module.exports = robot => {
             if (labels.includes('Needs: Reviewer Checklist') &&
                 prAuthor !== commentAuthor &&
                 comment.body.includes('Reviewer Checklist')) {
-                return await context.github.issues.removeLabel(
+                await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Reviewer Checklist'
+                    })
+                )
+                await context.github.issues.addLabels(
+                    context.issue({
+                        labels:['Needs: Merge']
                     })
                 )
             }

@@ -1,43 +1,52 @@
 module.exports = robot => {
-    robot.on('pull_request.opened', initialCheck);
-    robot.on('issue_comment.created', issueComment);
+    robot.on('pull_request.opened', pullRequestOpened);
+    robot.on('issue_comment.created', issueCommentCreated);
 
-    async function issueComment(context) {
+    async function issueCommentCreated(context) {
         if (context.payload.issue.pull_request !== undefined) {
             robot.log('THIS IS A PR COMMENT');
-            var needsAuthorChecklistLabel = {
-                "id": 654876885,
-                "url": "https://api.github.com/repos/luisschubert/webhookTest/labels/Needs:%20Author%20Checklist",
-                "name": "Needs: Author Checklist",
-                "color": "d93f0b",
-                "default": false
-            }
-            var needsReviewerChecklistLabel = {
-                "id": 654877075,
-                "url": "https://api.github.com/repos/luisschubert/webhookTest/labels/Needs:%20Reviewer%20Checklist",
-                "name": "Needs: Reviewer Checklist",
-                "color": "1d76db",
-                "default": false
-            }
+            var needsAuthorChecklistLabel = require(
+                './test/fixtures/needsAuthorChecklistLabel.json'
+            );
+            var needsReviewerChecklistLabel = require(
+                './test/fixtures/needsReviewerChecklistLabel.json'
+            );
             var prAuthor = context.payload.issue.user.login;
             var labels = context.payload.issue.labels;
             var comment = context.payload.comment;
             var commentAuthor = comment.user.login;
             var authorChecklistInBody = comment.body.includes('Author Checklist');
+            var reviewerChecklistInBody = comment.body.includes('Reviewer Checklist');
+
             var hasNeedsAuthorChecklistLabel;
-            var tempArr = labels.filter(function(label){
-                return label.name === "Needs: Author Checklist"
+            var tempAuthorChecklistArr = labels.filter(function(label){
+                return label.name === 'Needs: Author Checklist'
             })
-            if (tempArr.length > 0){
+            if (tempAuthorChecklistArr.length > 0){
                 hasNeedsAuthorChecklistLabel = true;
             }else{
                 hasNeedsAuthorChecklistLabel = false;
             }
+
+            var hasNeedsReviewerChecklistLabel;
+            var tempReviewerChecklistArr = labels.filter(function(label){
+                return label.name === 'Needs: Reviewer Checklist'
+            })
+            if (tempReviewerChecklistArr.length > 0){
+                hasNeedsReviewerChecklistLabel = true;
+            }else{
+                hasNeedsReviewerChecklistLabel = false;
+            }
+
+            //DIAGNOSTIC LOG
             robot.log('labels:' + JSON.stringify(labels));
             robot.log('prAuthor: '+ prAuthor);
             robot.log('commentAuthor: '+ commentAuthor);
             robot.log('author checklist in body: '+ authorChecklistInBody);
             robot.log('hasNeedsAuthorChecklistLabel: ' + hasNeedsAuthorChecklistLabel);
+            robot.log('hasNeedsReviewerChecklistLabel: ' + hasNeedsReviewerChecklistLabel);
+
+            //REMOVING/ADDING LABELS
             if (hasNeedsAuthorChecklistLabel &&
                 prAuthor === commentAuthor &&
                 authorChecklistInBody) {
@@ -53,9 +62,9 @@ module.exports = robot => {
                     })
                 )
             }
-            if (labels.includes('Needs: Reviewer Checklist') &&
+            if (hasNeedsReviewerChecklistLabel &&
                 prAuthor !== commentAuthor &&
-                comment.body.includes('Reviewer Checklist')) {
+                reviewerChecklistInBody) {
                 await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Reviewer Checklist'
@@ -73,7 +82,7 @@ module.exports = robot => {
         }
     }
 
-    async function initialCheck(context) {
+    async function pullRequestOpened(context) {
         var pr = await context.github.pullRequests.get(context.issue());
 
         var body = pr.data.body;

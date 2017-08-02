@@ -80,7 +80,7 @@ describe('autolabeler', () => {
     })
   });
 
-  describe('issue_comment event triggered', () => {
+  describe('issue_comment.created event triggered', () => {
       it('ignores the \'non-pr\' issue comments', async () => {
           const event_issue_comment = require('./fixtures/issue_comment.issue.created');
 
@@ -103,32 +103,65 @@ describe('autolabeler', () => {
           expect(robot.log).toHaveBeenCalledWith(
               'THIS IS AN ISSUE COMMENT'
           );
-          
+
       });
-      it('logs the body of pr comment', async () => {
-          const event_pr_issue_comment = require('./fixtures/issue_comment.pr.created');
+      it('removes \'Needs: Author Checklist\' and adds \'Needs: Reviewer Checklist\'if Author Checklist is in comment body',async () => {
+          const event_NACL_to_NRCL = require('./fixtures/issue_comment.pr.created.NACL->NRCL');
 
           // Mock out the GitHub API
           github = {
             issues: {
-              getComments: expect.createSpy().andReturn(
-                  {"comment1": "hello luis"}
-              )
+              addLabels: expect.createSpy(),
+              removeLabel: expect.createSpy()
             }
           };
-
-          robot.log = expect.createSpy();
 
           // Mock out GitHub App authentication and return our mock client
           robot.auth = () => Promise.resolve(github);
 
-          await robot.receive(event_pr_issue_comment);
 
-          expect(robot.log).toHaveBeenCalledWith(
-              'THIS IS A PULL REQUEST COMMENT'
-          );
+          await robot.receive(event_NACL_to_NRCL);
+          expect(github.issues.removeLabel).toHaveBeenCalledWith({
+              owner: 'luisschubert',
+              repo: 'webhookTest',
+              number: 26,
+              name: 'Needs: Author Checklist'
+          });
+          expect(github.issues.addLabels).toHaveBeenCalledWith({
+              owner: 'luisschubert',
+              repo: 'webhookTest',
+              number: 26,
+              labels: ['Needs: Reviewer Checklist']
+          });
+      });
+      it('removes \'Needs: Reviewer Checklist\' and adds \'Needs: Merge\' if Reviewer Checklist is comment body', async () => {
+          const event_NRCL_to_NM = require('./fixtures/issue_comment.pr.created.NRCL->NM');
+
+          // Mock out the GitHub API
+          github = {
+            issues: {
+              addLabels: expect.createSpy(),
+              removeLabel: expect.createSpy()
+            }
+          };
+
+          // Mock out GitHub App authentication and return our mock client
+          robot.auth = () => Promise.resolve(github);
 
 
+          await robot.receive(event_NRCL_to_NM);
+          expect(github.issues.removeLabel).toHaveBeenCalledWith({
+              owner: 'luisschubert',
+              repo: 'webhookTest',
+              number: 26,
+              name: 'Needs: Reviewer Checklist'
+          });
+          expect(github.issues.addLabels).toHaveBeenCalledWith({
+              owner: 'luisschubert',
+              repo: 'webhookTest',
+              number: 26,
+              labels: ['Needs: Merge']
+          });
       });
   })
 });

@@ -4,3 +4,4 @@ npm-debug.log
 .env
 .envrc
 futureCode
+.DS_STORE

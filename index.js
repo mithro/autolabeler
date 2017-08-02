@@ -42,7 +42,7 @@ module.exports = robot => {
                 prAuthor === commentAuthor &&
                 authorChecklistInBody) {
                     robot.log('removing needs author checklist');
-                return await context.github.issues.removeLabel(
+                await context.github.issues.removeLabel(
                     context.issue({
                         name: 'Needs: Author Checklist'
                     })

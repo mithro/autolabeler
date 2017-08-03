@@ -13,7 +13,7 @@
   "dependencies": {
     "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "probot": "https://github.com/probot/probot#express"
+    "probot": "https://github.com/luisschubert/probot#express"
   },
   "devDependencies": {
     "eslint-config-probot": ">=0.1.0",

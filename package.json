@@ -8,12 +8,12 @@
   "scripts": {
     "start": "probot run ./index.js",
     "test": "mocha ",
-    "style-test":  "xo --extend probot"
+    "style-test": "xo --extend probot"
   },
   "dependencies": {
     "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "probot": "^0.7.5"
+    "probot": "https://github.com/probot/probot#express"
   },
   "devDependencies": {
     "eslint-config-probot": ">=0.1.0",

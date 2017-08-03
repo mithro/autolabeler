@@ -1,4 +1,15 @@
 module.exports = robot => {
+    const app = robot.route('/autolabeler');
+    app.get('/controls', async (req, res) => {
+        var github = robot.auth(42149);
+        var PRs = await github.pullRequests.getAll({
+            owner: 'luisschubert',
+            repo: 'webhookTest'
+        });
+        console.log(PRs);
+        res.end(JSON.stringify(PRs, null, "  "));
+    });
+
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);
     robot.on('issue_comment.edited', async context => {
@@ -13,7 +24,9 @@ module.exports = robot => {
         );
         console.log(openPRs);
 
-    })
+    });
+
+
 
 
     async function issueCommentCreated(context) {

@@ -2,12 +2,19 @@ module.exports = robot => {
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);
     robot.on('issue_comment.edited', async context => {
-        var nasaTeams = await context.github.orgs.getTeams({
-            org: 'nasa'
-        });
-        console.log(nasaTeams);
+        // var nasaTeams = await context.github.orgs.getTeams({
+        //     org: 'nasa'
+        // });
+        // console.log(nasaTeams);
+        var openPRs = await context.github.pullRequests.getAll(
+            context.issue({
+                state: 'open'
+            })
+        );
+        console.log(openPRs);
 
     })
+
 
     async function issueCommentCreated(context) {
         if (context.payload.issue.pull_request !== undefined) {

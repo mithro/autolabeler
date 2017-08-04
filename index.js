@@ -1,9 +1,9 @@
 module.exports = robot => {
     const app = robot.route('/autolabeler');
-    app.use(require('express').static('public'));
+    //app.use(require('express').static('public'));
 
     app.get('/controls', async (req, res) => {
-        res.sendFile('controls.html');
+        res.sendFile(require('path').join(__dirname +'/public/controls.html'));
     });
 
     app.get('/openPRs', async (req, res) => {

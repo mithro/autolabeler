@@ -1,7 +1,7 @@
 module.exports = robot => {
     const app = robot.route('/autolabeler');
     app.get('/controls', async (req, res) => {
-        var github = robot.auth(42149);
+        var github = await robot.auth(42149);
         var PRs = await github.pullRequests.getAll({
             owner: 'luisschubert',
             repo: 'webhookTest'

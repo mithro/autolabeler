@@ -1,6 +1,10 @@
 module.exports = robot => {
     const app = robot.route('/autolabeler');
     app.get('/controls', async (req, res) => {
+        res.end(require('./controls.html'));
+    });
+
+    app.get('/openPRs', async (req, res) => {
         var github = await robot.auth(42149);
         var PRs = await github.pullRequests.getAll({
             owner: 'luisschubert',

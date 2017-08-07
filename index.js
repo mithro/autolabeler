@@ -80,7 +80,7 @@ module.exports = robot => {
         //get all the comments
         var comments = await github.issues.getComments({
             owner:'luisschubert',
-            repo: 'webhookTest'
+            repo: 'webhookTest',
             number: PR.number
         });
         comments.forEach(function(comment) {

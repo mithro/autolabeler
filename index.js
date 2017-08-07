@@ -23,6 +23,7 @@ module.exports = robot => {
         });
         //for pr in PRS check what labels should be there.
         PRs.forEach(function(PR){
+            console.log("github is: "+github);
             var labels = await github.issues.getIssueLabels({
                 owner: 'luisschubert',
                 name: 'webhookTest',
@@ -63,6 +64,7 @@ module.exports = robot => {
             }
 
         });
+        res.end('undetermined state');
 
 
 

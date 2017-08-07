@@ -53,17 +53,38 @@
     }
 
     function init(){
-        var contentItems = document.getElementsByClassName('contentItem');
-        var contentItemsArray = Array.from(contentItems);
-        contentItemsArray = contentItemsArray.map(function(contentItem){
-            return contentItem.addEventListener('click', function(event){
-                console.log(event);
-                // console.log('Action: '+ event.target.innerText)
+        // var contentItems = document.getElementsByClassName('contentItem');
+        // var contentItemsArray = Array.from(contentItems);
+        // contentItemsArray = contentItemsArray.map(function(contentItem){
+        //     return contentItem.addEventListener('click', function(event){
+        //         console.log(event);
+        //         // console.log('Action: '+ event.target.innerText)
+        //
+        //
+        //     })
+        // });
+        var initializeButton = document.getElementById('initialize');
+        initializeButton.addEventListener('click', function(event) {
+            fetch('/autolabeler/check/')  
+              .then(
+                function(response) {
+                  if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                      response.status);
+                    return;
+                  }
 
+                  // Examine the text in the response
+                  response.json().then(function(data) {
+                    console.log(data);
+                  });
+                }
+              )
+              .catch(function(err) {
+                console.log('Fetch Error :-S', err);
+              });
+        })
 
-            })
-        });
-        
     }
     ready(init);
     </script>
@@ -75,7 +96,7 @@
         </div>
     </div>
     <div class='contentContainer'>
-        <div class='contentItem'>
+        <div id='initialize' class='contentItem'>
             Initialize Setup
         </div>
         <!-- <div class='contentItem'>

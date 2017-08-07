@@ -15,6 +15,92 @@ module.exports = robot => {
         console.log(PRs);
         res.end(JSON.stringify(PRs, null, "  "));
     });
+    app.get('/check', async (req,res) => {
+        var github = await robot.auth(42149);
+        var PRs = await github.pullRequests.getAll({
+            owner: 'luisschubert',
+            repo: 'webhookTest'
+        });
+        //for pr in PRS check what labels should be there.
+        PRs.forEach(function(PR){
+            var labels = await github.issues.getIssueLabels({
+                owner: 'luisschubert',
+                name: 'webhookTest',
+                number: PR.number
+            });
+            //check if pr needs author checklist
+            var ACL = hasAuthorChecklist(github, PR);
+            //check if pr needs reviewer checklist
+            var RCL = hasReviewerChecklist(github, PR);
+
+            //check if pr is ready for merge.
+            if (ACL && RCL) {
+                //Needs: Merge
+                await github.issues.addLabels({
+                    owner: 'luisschubert',
+                    name: 'webhookTest',
+                    number: PR.number,
+                    labels: ['Needs: Merge']
+                })
+            }
+            else if (ACL && !RCL) {
+                //Needs: Reviewer Checklist
+                await github.issues.addLabels({
+                    owner: 'luisschubert',
+                    name: 'webhookTest',
+                    number: PR.number,
+                    labels: ['Needs: Reviewer Checklist']
+                })
+            }
+            else if (!ACL && !RCL) {
+                //Needs: Author Checklist
+                await github.issues.addLabels({
+                    owner: 'luisschubert',
+                    name: 'webhookTest',
+                    number: PR.number,
+                    labels: ['Needs: Author Checklist']
+                })
+            }
+
+        });
+
+
+
+    })
+
+    //SHOULDN'T BE IN THIS FILE
+    async function hasAuthorChecklist(github, PR) {
+        //check the body of the PR
+        //if 'Author Checklist' is include -> true
+        if (PR.body.includes('Author Checklist')) return true;
+
+        //check the comments
+        //get all the comments
+        var comments = await github.issues.getComments({
+            owner:'luisschubert',
+            repo: 'webhookTest'
+            number: PR.number
+        });
+        comments.forEach(function(comment) {
+            if (comment.body.includes('Author Checklist')) return true;
+        });
+
+        //return false if no Author Checklist is found
+        return false;
+    }
+    async function hasReviewerChecklist(github, PR) {
+        var comments = await github.issues.getComments({
+            owner: 'luisschubert',
+            repo: 'webhookTest',
+            number: PR.number
+        });
+        comments.forEach(function(comment) {
+            if (comment.body.includes('Reviewer Checklist')) return true;
+        });
+
+        //return false if no Reviewer Checklist is found
+        return false;
+    }
 
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);

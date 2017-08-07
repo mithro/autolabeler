@@ -9,6 +9,8 @@
     .mainHeadingContainer {
         display: flex;
         flex-direction: row;
+        padding-top: 50px;
+        padding-bottom: 50px;
         justify-content: center;
     }
     .mainHeadingItem {
@@ -17,20 +19,54 @@
     }
     .contentContainer {
         display: flex;
+        font-size: xx-large;
         flex-direction: column;
         justify-content: center;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 90px;
     }
     .contentItem {
         margin:auto;
         font-size: -webkit-xx-large;
         width: 200px;
         height: 100px;
-        border: 3px solid grey;
-        background: #eee;
+        border: 3px solid #808080;
+        background: #eeeeee;
         border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .contentItem:hover {
+        background: #bfbfbf
     }
 
     </style>
+    <script>
+    function ready(fn) {
+      if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+        fn();
+      } else {
+        document.addEventListener('DOMContentLoaded', fn);
+      }
+    }
+
+    function init(){
+        var contentItems = document.getElementsByClassName('contentItem');
+        var contentItemsArray = Array.from(contentItems);
+        contentItemsArray = contentItemsArray.map(function(contentItem){
+            return contentItem.addEventListener('click', function(event){
+                console.log(event);
+                // console.log('Action: '+ event.target.innerText)
+
+
+            })
+        });
+        
+    }
+    ready(init);
+    </script>
 </head>
 <body>
     <div class='mainHeadingContainer'>
@@ -42,12 +78,12 @@
         <div class='contentItem'>
             Initialize Setup
         </div>
-        <div class='contentItem'>
+        <!-- <div class='contentItem'>
             Rerun Setup
         </div>
         <div class='contentItem'>
             Get Event Log
-        </div>
+        </div> -->
     </div>
 </body>
 </html>

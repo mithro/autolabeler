@@ -21,7 +21,7 @@ module.exports = robot => {
             owner: 'luisschubert',
             repo: 'webhookTest'
         });
-        console.log(PRs.payload);
+        console.log(Object.keys(PRs));
         //for pr in PRS check what labels should be there.
         PRs.forEach(async function(PR){
             console.log("github is: "+github);

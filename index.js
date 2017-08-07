@@ -72,10 +72,12 @@ module.exports = robot => {
 
     //SHOULDN'T BE IN THIS FILE
     async function hasAuthorChecklist(github, PR) {
+        var hasACL = false;
         //check the body of the PR
         //if 'Author Checklist' is include -> true
         if (PR.body.includes('Author Checklist')) {
             robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the body: '+PR.body);
+            hasACL = true;
             return true;
         }
 
@@ -89,15 +91,19 @@ module.exports = robot => {
         comments.data.forEach(function(comment) {
             if (comment.body.includes('Author Checklist')) {
                 robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the comment: '+comment.body);
+                hasACL = true;
                 return true;
             }
         });
 
         //return false if no Author Checklist is found
-        robot.log('I decided that PR #'+PR.number+' has no Author Checklist');
-        return false;
+        if (!hasACL) {
+            robot.log('I decided that PR #'+PR.number+' has no Author Checklist');
+            return false;
+        }
     }
     async function hasReviewerChecklist(github, PR) {
+        var hasRCL = false;
         var comments = await github.issues.getComments({
             owner: 'luisschubert',
             repo: 'webhookTest',
@@ -106,13 +112,16 @@ module.exports = robot => {
         comments.data.forEach(function(comment) {
             if (comment.body.includes('Reviewer Checklist')) {
                 robot.log('I decided that PR #'+PR.number+' has a Reviewer Checklist because Reviewer Checklist was included in the comment: '+ comment.body);
+                hasRCL = true;
                 return true;
             }
         });
 
         //return false if no Reviewer Checklist is found
-        robot.log('I decided that PR #'+PR.number+' has no Reviewer Checklist');
-        return false;
+        if (!hasRCL) {
+            robot.log('I decided that PR #'+PR.number+' has no Reviewer Checklist');
+            return false;
+        }
     }
 
     robot.on('pull_request.opened', pullRequestOpened);

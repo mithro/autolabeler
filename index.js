@@ -26,7 +26,7 @@ module.exports = robot => {
             console.log("github is: "+github);
             var labels = await github.issues.getIssueLabels({
                 owner: 'luisschubert',
-                name: 'webhookTest',
+                repo: 'webhookTest',
                 number: PR.number
             });
             //check if pr needs author checklist
@@ -39,7 +39,7 @@ module.exports = robot => {
                 //Needs: Merge
                 await github.issues.addLabels({
                     owner: 'luisschubert',
-                    name: 'webhookTest',
+                    repo: 'webhookTest',
                     number: PR.number,
                     labels: ['Needs: Merge']
                 })
@@ -48,7 +48,7 @@ module.exports = robot => {
                 //Needs: Reviewer Checklist
                 await github.issues.addLabels({
                     owner: 'luisschubert',
-                    name: 'webhookTest',
+                    repo: 'webhookTest',
                     number: PR.number,
                     labels: ['Needs: Reviewer Checklist']
                 })
@@ -57,7 +57,7 @@ module.exports = robot => {
                 //Needs: Author Checklist
                 await github.issues.addLabels({
                     owner: 'luisschubert',
-                    name: 'webhookTest',
+                    repo: 'webhookTest',
                     number: PR.number,
                     labels: ['Needs: Author Checklist']
                 })

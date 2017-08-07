@@ -83,7 +83,7 @@ module.exports = robot => {
             repo: 'webhookTest',
             number: PR.number
         });
-        comments.forEach(function(comment) {
+        comments.data.forEach(function(comment) {
             if (comment.body.includes('Author Checklist')) return true;
         });
 
@@ -96,7 +96,7 @@ module.exports = robot => {
             repo: 'webhookTest',
             number: PR.number
         });
-        comments.forEach(function(comment) {
+        comments.data.forEach(function(comment) {
             if (comment.body.includes('Reviewer Checklist')) return true;
         });
 

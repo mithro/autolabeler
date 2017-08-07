@@ -30,9 +30,9 @@ module.exports = robot => {
                 number: PR.number
             });
             //check if pr needs author checklist
-            var ACL = hasAuthorChecklist(github, PR);
+            var ACL = await hasAuthorChecklist(github, PR);
             //check if pr needs reviewer checklist
-            var RCL = hasReviewerChecklist(github, PR);
+            var RCL = await hasReviewerChecklist(github, PR);
 
             //check if pr is ready for merge.
             if (ACL && RCL) {

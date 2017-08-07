@@ -75,7 +75,7 @@ module.exports = robot => {
         //check the body of the PR
         //if 'Author Checklist' is include -> true
         if (PR.body.includes('Author Checklist')) {
-            robot.log('I decided that PR #'+PR.number' has an Author Checklist because Author Checklist was included in the body: '+PR.body);
+            robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the body: '+PR.body);
             return true;
         }
 

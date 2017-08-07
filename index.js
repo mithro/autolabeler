@@ -74,7 +74,10 @@ module.exports = robot => {
     async function hasAuthorChecklist(github, PR) {
         //check the body of the PR
         //if 'Author Checklist' is include -> true
-        if (PR.body.includes('Author Checklist')) return true;
+        if (PR.body.includes('Author Checklist')) {
+            robot.log('I decided that PR #'+PR.number' has an Author Checklist because Author Checklist was included in the body: '+PR.body);
+            return true;
+        }
 
         //check the comments
         //get all the comments
@@ -84,10 +87,14 @@ module.exports = robot => {
             number: PR.number
         });
         comments.data.forEach(function(comment) {
-            if (comment.body.includes('Author Checklist')) return true;
+            if (comment.body.includes('Author Checklist')) {
+                robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the comment: '+comment.body);
+                return true;
+            }
         });
 
         //return false if no Author Checklist is found
+        robot.log('I decided that PR #'+PR.number+' has no Author Checklist');
         return false;
     }
     async function hasReviewerChecklist(github, PR) {
@@ -97,10 +104,14 @@ module.exports = robot => {
             number: PR.number
         });
         comments.data.forEach(function(comment) {
-            if (comment.body.includes('Reviewer Checklist')) return true;
+            if (comment.body.includes('Reviewer Checklist')) {
+                robot.log('I decided that PR #'+PR.number+' has a Reviewer Checklist because Reviewer Checklist was included in the comment: '+ comment.body);
+                return true;
+            }
         });
 
         //return false if no Reviewer Checklist is found
+        robot.log('I decided that PR #'+PR.number+' has no Reviewer Checklist');
         return false;
     }
 

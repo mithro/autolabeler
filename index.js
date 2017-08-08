@@ -34,9 +34,11 @@ module.exports = robot => {
             //check if pr needs reviewer checklist
             var RCL = await hasReviewerChecklist(github, PR);
 
+            robot.log("PR #"+PR.number+" ACL: "+ACL+"RCL: "+RCL);
             //check if pr is ready for merge.
             if (ACL && RCL) {
                 //Needs: Merge
+                robot.log("I decided that #"+PR.number+" Needs: Merge");
                 await github.issues.addLabels({
                     owner: 'luisschubert',
                     repo: 'webhookTest',
@@ -46,6 +48,7 @@ module.exports = robot => {
             }
             else if (ACL && !RCL) {
                 //Needs: Reviewer Checklist
+                robot.log("I decided that #"+PR.number+" Needs: Reviewer Checklist");
                 await github.issues.addLabels({
                     owner: 'luisschubert',
                     repo: 'webhookTest',
@@ -55,12 +58,16 @@ module.exports = robot => {
             }
             else if (!ACL && !RCL) {
                 //Needs: Author Checklist
+                robot.log("I decided that #"+PR.number+" Needs: Author Checklist");
                 await github.issues.addLabels({
                     owner: 'luisschubert',
                     repo: 'webhookTest',
                     number: PR.number,
                     labels: ['Needs: Author Checklist']
                 })
+            }
+            else {
+                robot.log("#"+PR.number+"... how did we get here?")
             }
 
         });

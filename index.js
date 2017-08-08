@@ -1,4 +1,6 @@
 module.exports = robot => {
+    const repoOwner = 'luisschubert';
+    const repoName = 'webhookTest';
     const app = robot.route('/autolabeler');
     //app.use(require('express').static('public'));
 
@@ -9,8 +11,8 @@ module.exports = robot => {
     app.get('/openPRs', async (req, res) => {
         var github = await robot.auth(42149);
         var PRs = await github.pullRequests.getAll({
-            owner: 'luisschubert',
-            repo: 'webhookTest'
+            owner: repoOwner,
+            repo: repoName
         });
         console.log(PRs);
         res.end(JSON.stringify(PRs, null, "  "));
@@ -18,15 +20,15 @@ module.exports = robot => {
     app.get('/check', async (req,res) => {
         var github = await robot.auth(42149);
         var PRs = await github.pullRequests.getAll({
-            owner: 'luisschubert',
-            repo: 'webhookTest'
+            owner: repoOwner,
+            repo: repoName
         });
         //for pr in PRS check what labels should be there.
         PRs.data.forEach(async function(PR){
             console.log("github is: "+github);
             var labels = await github.issues.getIssueLabels({
-                owner: 'luisschubert',
-                repo: 'webhookTest',
+                owner: repoOwner,
+                repo: repoName,
                 number: PR.number
             });
             //check if pr needs author checklist
@@ -40,8 +42,8 @@ module.exports = robot => {
                 //Needs: Merge
                 robot.log("I decided that #"+PR.number+" Needs: Merge");
                 await github.issues.addLabels({
-                    owner: 'luisschubert',
-                    repo: 'webhookTest',
+                    owner: repoOwner,
+                    repo: repoName,
                     number: PR.number,
                     labels: ['Needs: Merge']
                 })
@@ -50,8 +52,8 @@ module.exports = robot => {
                 //Needs: Reviewer Checklist
                 robot.log("I decided that #"+PR.number+" Needs: Reviewer Checklist");
                 await github.issues.addLabels({
-                    owner: 'luisschubert',
-                    repo: 'webhookTest',
+                    owner: repoOwner,
+                    repo: repoName,
                     number: PR.number,
                     labels: ['Needs: Reviewer Checklist']
                 })
@@ -60,8 +62,8 @@ module.exports = robot => {
                 //Needs: Author Checklist
                 robot.log("I decided that #"+PR.number+" Needs: Author Checklist");
                 await github.issues.addLabels({
-                    owner: 'luisschubert',
-                    repo: 'webhookTest',
+                    owner: repoOwner,
+                    repo: repoName,
                     number: PR.number,
                     labels: ['Needs: Author Checklist']
                 })
@@ -91,8 +93,8 @@ module.exports = robot => {
         //check the comments
         //get all the comments
         var comments = await github.issues.getComments({
-            owner:'luisschubert',
-            repo: 'webhookTest',
+            owner: repoOwner,
+            repo: repoName,
             number: PR.number
         });
         comments.data.forEach(function(comment) {
@@ -116,8 +118,8 @@ module.exports = robot => {
     async function hasReviewerChecklist(github, PR) {
         var hasRCL = false;
         var comments = await github.issues.getComments({
-            owner: 'luisschubert',
-            repo: 'webhookTest',
+            owner: repoOwner,
+            repo: repoName,
             number: PR.number
         });
         comments.data.forEach(function(comment) {

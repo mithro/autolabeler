@@ -85,7 +85,7 @@ module.exports = robot => {
         if (PR.body.includes('Author Checklist')) {
             robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the body: '+PR.body);
             hasACL = true;
-            return true;
+            //return true;
         }
 
         //check the comments
@@ -99,7 +99,7 @@ module.exports = robot => {
             if (comment.body.includes('Author Checklist')) {
                 robot.log('I decided that PR #'+PR.number+' has an Author Checklist because Author Checklist was included in the comment: '+comment.body);
                 hasACL = true;
-                return true;
+                //return true;
             }
         });
 
@@ -107,6 +107,10 @@ module.exports = robot => {
         if (!hasACL) {
             robot.log('I decided that PR #'+PR.number+' has no Author Checklist');
             return false;
+        }
+        else{
+            robot.log('I decided that PR #'+PR.number+' has an Author Checklist');
+            return true;
         }
     }
     async function hasReviewerChecklist(github, PR) {
@@ -120,7 +124,7 @@ module.exports = robot => {
             if (comment.body.includes('Reviewer Checklist')) {
                 robot.log('I decided that PR #'+PR.number+' has a Reviewer Checklist because Reviewer Checklist was included in the comment: '+ comment.body);
                 hasRCL = true;
-                return true;
+                // return true;
             }
         });
 
@@ -128,6 +132,10 @@ module.exports = robot => {
         if (!hasRCL) {
             robot.log('I decided that PR #'+PR.number+' has no Reviewer Checklist');
             return false;
+        }
+        else{
+            robot.log('I decided that PR #'+PR.number+' has a Reviewer Checklist');
+            return true;
         }
     }
 

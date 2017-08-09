@@ -36,7 +36,7 @@ module.exports = robot => {
             //check if pr needs reviewer checklist
             var RCL = await hasReviewerChecklist(github, PR);
             //check if the author has signed a CLA
-            hasCLA(PR);
+            hasCLA(github, PR);
 
             robot.log("PR #"+PR.number+" ACL: "+ACL+"RCL: "+RCL);
             //check if pr is ready for merge.

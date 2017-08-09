@@ -35,6 +35,8 @@ module.exports = robot => {
             var ACL = await hasAuthorChecklist(github, PR);
             //check if pr needs reviewer checklist
             var RCL = await hasReviewerChecklist(github, PR);
+            //check if the author has signed a CLA
+            hasCLA(PR);
 
             robot.log("PR #"+PR.number+" ACL: "+ACL+"RCL: "+RCL);
             //check if pr is ready for merge.
@@ -73,11 +75,22 @@ module.exports = robot => {
             }
 
         });
-        res.end('undetermined state');
-
-
-
+        res.end({message: 'initializing labels on pull requests'});
     })
+
+    function hasCLA(PR) {
+        console.log(PR);
+        var prAuthor = PR.pull_request.login;
+        var cla = JSON.parse(require('fs').readFileSync('cla.json'));
+        //check if author is in claList
+        if (!cla.contributors.includes(prAuthor)) {
+            context.github.issues.addLabels(
+                context.issue({
+                    labels: ['Needs: CLA']
+                })
+            );
+        }
+    }
 
     //SHOULDN'T BE IN THIS FILE
     async function hasAuthorChecklist(github, PR) {
@@ -115,6 +128,7 @@ module.exports = robot => {
             return true;
         }
     }
+
     async function hasReviewerChecklist(github, PR) {
         var hasRCL = false;
         var comments = await github.issues.getComments({

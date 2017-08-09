@@ -240,6 +240,7 @@ module.exports = robot => {
     }
 
     async function pullRequestOpened(context) {
+        initialCLACheck(context);
         var pr = await context.github.pullRequests.get(context.issue());
 
         var body = pr.data.body;
@@ -255,6 +256,19 @@ module.exports = robot => {
             return context.github.issues.addLabels(
                 context.issue({
                     labels: ['Needs: Reviewer Checklist']
+                })
+            );
+        }
+    }
+
+    function initialCLACheck(context) {
+        var prAuthor = context.payload.sender.login;
+        var cla = JSON.parse(require('fs').readFileSync('cla.json'));
+        //check if author is in claList
+        if (!cla.contributors.includes(prAuthor)) {
+            context.github.issues.addLabels(
+                context.issue({
+                    labels: ['Needs: CLA']
                 })
             );
         }

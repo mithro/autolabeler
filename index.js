@@ -75,20 +75,21 @@ module.exports = robot => {
             }
 
         });
-        res.end({message: 'initializing labels on pull requests'});
+        res.end(JSON.stringify({message: 'initializing labels on pull requests'}));
     })
 
-    function hasCLA(PR) {
+    function hasCLA(github, PR) {
         // console.log(PR);
         var prAuthor = PR.user.login;
         var cla = JSON.parse(require('fs').readFileSync('cla.json'));
         //check if author is in claList
         if (!cla.contributors.includes(prAuthor)) {
-            context.github.issues.addLabels(
-                context.issue({
-                    labels: ['Needs: CLA']
-                })
-            );
+            github.issues.addLabels({
+                owner: repoOwner,
+                repo: repoName,
+                number: PR.number,
+                labels: ['Needs: CLA']
+            });
         }
     }
 

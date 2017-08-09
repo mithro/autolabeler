@@ -79,8 +79,8 @@ module.exports = robot => {
     })
 
     function hasCLA(PR) {
-        console.log(PR);
-        var prAuthor = PR.pull_request.login;
+        // console.log(PR);
+        var prAuthor = PR.user.login;
         var cla = JSON.parse(require('fs').readFileSync('cla.json'));
         //check if author is in claList
         if (!cla.contributors.includes(prAuthor)) {

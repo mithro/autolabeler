@@ -38,7 +38,7 @@ module.exports = robot => {
             //check if the author has signed a CLA
             hasCLA(github, PR);
 
-            robot.log("PR #"+PR.number+" ACL: "+ACL+"RCL: "+RCL);
+            // robot.log("PR #"+PR.number+" ACL: "+ACL+", RCL: "+RCL);
             //check if pr is ready for merge.
             if (ACL && RCL) {
                 //Needs: Merge

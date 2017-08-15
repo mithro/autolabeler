@@ -15,9 +15,9 @@ module.exports = robot => {
         const hash = crypto.createHash('sha256');
         hash.update(password);
         const hexPassword = hash.digest('hex');
-        console.log('hexPassword: '+ hexPassword);
+        console.log('hexPassword: '+ hexPassword+" " +typeof(hexPassword));
         const hashToMatch = require('fs').readFileSync('.passwordHash');
-        console.log('hashToMatch: ' + hashToMatch);
+        console.log('hashToMatch: ' + hashToMatch +" " +typeof(hashToMatch);
         console.log(hexPassword === hashToMatch);
         if(hexPassword === hashToMatch){
             res.sendFile(require('path').join(__dirname +'/public/controls.html'));

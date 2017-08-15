@@ -19,7 +19,7 @@ module.exports = robot => {
         const hashToMatch = require('fs').readFileSync('.passwordHash');
         console.log('hashToMatch: ' + hashToMatch +" " +typeof(hashToMatch));
         console.log(hexPassword === hashToMatch);
-        if(hexPassword === hashToMatch){
+        if(hexPassword == hashToMatch){
             res.sendFile(require('path').join(__dirname +'/public/controls.html'));
         }
         else {

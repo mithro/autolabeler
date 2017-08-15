@@ -5,7 +5,7 @@ module.exports = robot => {
     //app.use(require('express').static('public'));
 
     app.get('/controls', async (req, res) => {
-        res.sendFile(require('path').join(__dirname +'/public/controls.html'));
+        res.sendFile(require('path').join(__dirname +'/public/secure.html'));
     });
     app.get('/securedcontrols', (req, res) => {
         const password = req.params.password;

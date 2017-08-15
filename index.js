@@ -8,8 +8,8 @@ module.exports = robot => {
         res.sendFile(require('path').join(__dirname +'/public/secure.html'));
     });
     app.get('/securedcontrols', async (req, res) => {
-        //const password = req.params.password;
-        const password = 'openmctisclosed'
+        const password = req.query.password;
+        //const password = 'openmctisclosed'
         console.log('password in the clear: ' + password);
         const crypto = require('crypto');
         const hash = crypto.createHash('sha256');

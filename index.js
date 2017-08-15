@@ -7,7 +7,7 @@ module.exports = robot => {
     app.get('/controls', async (req, res) => {
         res.sendFile(require('path').join(__dirname +'/public/secure.html'));
     });
-    app.get('/securedcontrols', (req, res) => {
+    app.get('/securedcontrols/:password', (req, res) => {
         const password = req.params.password;
         console.log('password in the clear: ' + password);
         const crypto = require('crypto');

@@ -7,6 +7,22 @@ module.exports = robot => {
     app.get('/controls', async (req, res) => {
         res.sendFile(require('path').join(__dirname +'/public/controls.html'));
     });
+    app.get('/securedcontrols', (req, res) => {
+        const password = req.params.password;
+        console.log('password in the clear: ' + password);
+        const crypto = require('crypto');
+        const hash = crypto.createHash('sha256');
+        hash.update(password);
+        const hexPassword = hash.digest('hex');
+        const hashToMatch = require('fs').readFileSync('.passwordHash');
+        if(hexPassword === hashToMatch){
+            res.sendFile(require('path').join(__dirname +'/public/controls.html'));
+        }
+        else {
+            res.sendStatus(403);
+        }
+
+    });
 
     app.get('/openPRs', async (req, res) => {
         var github = await robot.auth(42149);

@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <script>
+        function ready(fn) {
+          if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+            fn();
+          } else {
+            document.addEventListener('DOMContentLoaded', fn);
+          }
+        }
+        ready(function(){
+            var password = prompt('Provide a password to access the panel!');
+            window.location.href = 'https://'+location.hostname+'/autolabeler/securedcontrols?password=' +password
+        })
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

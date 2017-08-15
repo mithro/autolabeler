@@ -7,7 +7,7 @@ module.exports = robot => {
     app.get('/controls', async (req, res) => {
         res.sendFile(require('path').join(__dirname +'/public/secure.html'));
     });
-    app.get('/securedcontrols/:password', async (req, res) => {
+    app.get('/securedcontrols', async (req, res) => {
         //const password = req.params.password;
         const password = 'openmctisclosed'
         console.log('password in the clear: ' + password);

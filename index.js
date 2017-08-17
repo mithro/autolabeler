@@ -4,42 +4,12 @@ module.exports = robot => {
     const app = robot.route('/autolabeler');
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
-    //app.use(require('express').static('public'));
 
     app.get('/controls', async (req, res) => {
-        res.sendFile(require('path').join(__dirname +'/public/secure.html'));
-    });
-    app.get('/securedcontrols', async (req, res) => {
-        const password = req.query.password;
-        //const password = 'openmctisclosed'
-        console.log('password in the clear: ' + password);
-        const crypto = require('crypto');
-        const hash = crypto.createHash('sha256');
-        hash.update(password);
-        const hexPassword = hash.digest('hex');
-        console.log('hexPassword: '+ hexPassword+" " +typeof(hexPassword));
-        const hashToMatch = require('fs').readFileSync('.passwordHash');
-        console.log('hashToMatch: ' + hashToMatch +" " +typeof(hashToMatch));
-        console.log(hexPassword === hashToMatch);
-        if(hexPassword == hashToMatch){
-            res.sendFile(require('path').join(__dirname +'/public/controls.html'));
-        }
-        else {
-            res.sendStatus(403);
-        }
-
+        res.sendFile(require('path').join(__dirname +'/public/controls.html'));
     });
 
-    app.get('/openPRs', async (req, res) => {
-        var github = await robot.auth(42149);
-        var PRs = await github.pullRequests.getAll({
-            owner: repoOwner,
-            repo: repoName
-        });
-        console.log(PRs);
-        res.end(JSON.stringify(PRs, null, "  "));
-    });
-
+    //curl -d '{"token":"INSERTTOKENHERE"}' -H "Content-Type: application/json" -X POST https://guarded-springs-55755.herokuapp.com/autolabeler/check
     app.post('/check', async (req, res) => {
         //get token from post parameter
         const reqToken = req.body.token;
@@ -111,67 +81,6 @@ module.exports = robot => {
         }
 
     });
-
-    app.get('/check', async (req,res) => {
-        var github = await robot.auth(42149);
-        var PRs = await github.pullRequests.getAll({
-            owner: repoOwner,
-            repo: repoName
-        });
-        //for pr in PRS check what labels should be there.
-        PRs.data.forEach(async function(PR){
-            console.log("github is: "+github);
-            var labels = await github.issues.getIssueLabels({
-                owner: repoOwner,
-                repo: repoName,
-                number: PR.number
-            });
-            //check if pr needs author checklist
-            var ACL = await hasAuthorChecklist(github, PR);
-            //check if pr needs reviewer checklist
-            var RCL = await hasReviewerChecklist(github, PR);
-            //check if the author has signed a CLA
-            hasCLA(github, PR);
-
-            // robot.log("PR #"+PR.number+" ACL: "+ACL+", RCL: "+RCL);
-            //check if pr is ready for merge.
-            if (ACL && RCL) {
-                //Needs: Merge
-                robot.log("I decided that #"+PR.number+" Needs: Merge");
-                await github.issues.addLabels({
-                    owner: repoOwner,
-                    repo: repoName,
-                    number: PR.number,
-                    labels: ['Needs: Merge']
-                })
-            }
-            else if (ACL && !RCL) {
-                //Needs: Reviewer Checklist
-                robot.log("I decided that #"+PR.number+" Needs: Reviewer Checklist");
-                await github.issues.addLabels({
-                    owner: repoOwner,
-                    repo: repoName,
-                    number: PR.number,
-                    labels: ['Needs: Reviewer Checklist']
-                })
-            }
-            else if (!ACL && !RCL) {
-                //Needs: Author Checklist
-                robot.log("I decided that #"+PR.number+" Needs: Author Checklist");
-                await github.issues.addLabels({
-                    owner: repoOwner,
-                    repo: repoName,
-                    number: PR.number,
-                    labels: ['Needs: Author Checklist']
-                })
-            }
-            else {
-                robot.log("#"+PR.number+"... how did we get here?")
-            }
-
-        });
-        res.end(JSON.stringify({message: 'initializing labels on pull requests'}));
-    })
 
     function hasCLA(github, PR) {
         // console.log(PR);

@@ -2,6 +2,8 @@ module.exports = robot => {
     const repoOwner = 'luisschubert';
     const repoName = 'webhookTest';
     const app = robot.route('/autolabeler');
+    var bodyParser = require('body-parser');
+    app.use(bodyParser.json());
     //app.use(require('express').static('public'));
 
     app.get('/controls', async (req, res) => {
@@ -37,6 +39,79 @@ module.exports = robot => {
         console.log(PRs);
         res.end(JSON.stringify(PRs, null, "  "));
     });
+
+    app.post('/check', async (req, res) => {
+        //get token from post parameter
+        const reqToken = req.body.token;
+        //get token from file
+        const tokenToMatch = require('fs').readFileSync('.passwordHash');
+        //check if token matches
+        if (reqToken == tokenToMatch) {
+            const github = await robot.auth(42149);
+            var PRs = await github.pullRequests.getAll({
+                owner: repoOwner,
+                repo: repoName
+            });
+            //for pr in PRS check what labels should be there.
+            PRs.data.forEach(async function(PR){
+                console.log("github is: "+github);
+                var labels = await github.issues.getIssueLabels({
+                    owner: repoOwner,
+                    repo: repoName,
+                    number: PR.number
+                });
+                //check if pr needs author checklist
+                var ACL = await hasAuthorChecklist(github, PR);
+                //check if pr needs reviewer checklist
+                var RCL = await hasReviewerChecklist(github, PR);
+                //check if the author has signed a CLA
+                hasCLA(github, PR);
+
+                // robot.log("PR #"+PR.number+" ACL: "+ACL+", RCL: "+RCL);
+                //check if pr is ready for merge.
+                if (ACL && RCL) {
+                    //Needs: Merge
+                    robot.log("I decided that #"+PR.number+" Needs: Merge");
+                    await github.issues.addLabels({
+                        owner: repoOwner,
+                        repo: repoName,
+                        number: PR.number,
+                        labels: ['Needs: Merge']
+                    })
+                }
+                else if (ACL && !RCL) {
+                    //Needs: Reviewer Checklist
+                    robot.log("I decided that #"+PR.number+" Needs: Reviewer Checklist");
+                    await github.issues.addLabels({
+                        owner: repoOwner,
+                        repo: repoName,
+                        number: PR.number,
+                        labels: ['Needs: Reviewer Checklist']
+                    })
+                }
+                else if (!ACL && !RCL) {
+                    //Needs: Author Checklist
+                    robot.log("I decided that #"+PR.number+" Needs: Author Checklist");
+                    await github.issues.addLabels({
+                        owner: repoOwner,
+                        repo: repoName,
+                        number: PR.number,
+                        labels: ['Needs: Author Checklist']
+                    })
+                }
+                else {
+                    robot.log("#"+PR.number+"... how did we get here?")
+                }
+
+            });
+            res.end(JSON.stringify({message: 'initializing labels on pull requests'}));
+        }
+        else {
+            res.sendStatus(401);
+        }
+
+    });
+
     app.get('/check', async (req,res) => {
         var github = await robot.auth(42149);
         var PRs = await github.pullRequests.getAll({

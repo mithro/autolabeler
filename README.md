@@ -6,6 +6,8 @@ Pull requests are automatically labelled according to where along in the merge p
 Additionally CLA status is determined using information from cla.json
 
 ## Setup
+>[Probot deploy instructions for reference](https://github.com/probot/probot/blob/master/docs/deployment.md)
+
 The contents of this repository will be deployed to heroku.
 The following environment variables need to be set:
 - [ ] APP_ID

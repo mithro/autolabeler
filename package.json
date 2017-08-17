@@ -11,6 +11,7 @@
     "style-test": "xo --extend probot"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
     "probot": "https://github.com/probot/probot"

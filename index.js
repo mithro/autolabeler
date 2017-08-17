@@ -1,13 +1,9 @@
 module.exports = robot => {
     const repoOwner = 'luisschubert';
     const repoName = 'webhookTest';
-    const app = robot.route('/autolabeler');
+    const app = robot.route('/openmct');
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
-
-    app.get('/controls', async (req, res) => {
-        res.sendFile(require('path').join(__dirname +'/public/controls.html'));
-    });
 
     //curl -d '{"token":"INSERTTOKENHERE"}' -H "Content-Type: application/json" -X POST https://guarded-springs-55755.herokuapp.com/autolabeler/check
     app.post('/check', async (req, res) => {
@@ -162,22 +158,6 @@ module.exports = robot => {
 
     robot.on('pull_request.opened', pullRequestOpened);
     robot.on('issue_comment.created', issueCommentCreated);
-    // robot.on('issue_comment.edited', async context => {
-    //     // var nasaTeams = await context.github.orgs.getTeams({
-    //     //     org: 'nasa'
-    //     // });
-    //     // console.log(nasaTeams);
-    //     var openPRs = await context.github.pullRequests.getAll(
-    //         context.issue({
-    //             state: 'open'
-    //         })
-    //     );
-    //     console.log(openPRs);
-    //
-    // });
-
-
-
 
     async function issueCommentCreated(context) {
         if (context.payload.issue.pull_request !== undefined) {

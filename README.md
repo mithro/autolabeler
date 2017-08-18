@@ -27,17 +27,11 @@ Every deployment will need an [App](https://developer.github.com/apps/).
 ## CoSE Bot Deployment
 
 
-To deploy a plugin to any cloud provider, you will need 3 environment variables:
+To deploy a the bot you will need 3 environment variables:
 
 - `APP_ID`: the ID of the app, which you can get from the [app settings page](https://github.com/settings/apps).
 - `WEBHOOK_SECRET`: the **Webhook Secret** that you generated when you created the app.
-
-And one of:
-
-- `PRIVATE_KEY`: the contents of the private key you downloaded after creating the app, OR...
-- `PRIVATE_KEY_PATH`: the path to a private key file.
-
-`PRIVATE_KEY` takes precedence over `PRIVATE_KEY_PATH`.
+- `PRIVATE_KEY`: the contents of the private key you downloaded after creating the app.
 
 ### Heroku
 
@@ -60,7 +54,7 @@ Probot runs like [any other Node app](https://devcenter.heroku.com/articles/depl
 
         $ heroku config:set APP_ID=aaa \
             WEBHOOK_SECRET=bbb \
-            PRIVATE_KEY="$(cat ~/Downloads/*.private-key.pem)"
+            PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----..."
 
 1. Deploy the plugin to heroku with `git push`:
 

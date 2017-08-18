@@ -2,3 +2,7 @@ node_modules
 npm-debug.log
 *.pem
 .env
+.envrc
+futureCode
+.DS_STORE
+.passwordHash

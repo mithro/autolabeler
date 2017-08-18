@@ -1,7 +1,8 @@
 module.exports = robot => {
     const repoOwner = 'luisschubert';
     const repoName = 'webhookTest';
-    const app = robot.route('/openmct');
+    const installationId = 42149
+    const app = robot.route('/autolabeler');
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
 
@@ -13,7 +14,7 @@ module.exports = robot => {
         const tokenToMatch = require('fs').readFileSync('.passwordHash');
         //check if token matches
         if (reqToken == tokenToMatch) {
-            const github = await robot.auth(42149);
+            const github = await robot.auth(installationId);
             var PRs = await github.pullRequests.getAll({
                 owner: repoOwner,
                 repo: repoName

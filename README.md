@@ -8,14 +8,14 @@ Additionally CLA status is determined using information from cla.json
 ## Setup
 >[Probot deploy instructions for reference](https://github.com/probot/probot/blob/master/docs/deployment.md)
 
-The contents of this repository will be deployed to heroku.
-The following environment variables need to be set:
-- [ ] APP_ID
-- [ ] PRIVATE_KEY
-- [ ] WEBHOOK_SECRET
+Follow the probot instructions to create a github app and deploy to heroku.
+Set the permissions as follows:
+![Issue Permissions](http://i.imgur.com/3Txz2sd.png)
+![PR Permissions](http://i.imgur.com/07BTdVv.png)
 
-A Github app has to be created to communicate with the Heroku app.
 
+in `index.js` set the repo and owner name as well as installation id.
+Installation id can be found in a webhook message.
 ## Bot Interface:
 ### Create Token
 `node setPassword.js`

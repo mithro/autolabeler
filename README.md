@@ -1,5 +1,7 @@
 # {{ name }}
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/probot/autolabeler.svg)](https://greenkeeper.io/)
+
 > a GitHub App built with [probot](https://github.com/probot/probot) that {{ description }}
 
 ## Setup

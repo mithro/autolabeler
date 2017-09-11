@@ -7,7 +7,7 @@
   "repository": "https://github.com/probot/labeler.git",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "mocha && xo --extend probot"
+    "test": "mocha && standard"
   },
   "dependencies": {
     "ignore": "^3.3.3",
@@ -15,11 +15,15 @@
     "probot": "^0.10.0"
   },
   "devDependencies": {
-    "eslint-config-probot": ">=0.1.0",
     "expect": "^1.20.2",
     "localtunnel": "^1.8.2",
     "mocha": "^3.2.0",
-    "xo": "^0.18.0"
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   },
   "engines": {
     "node": ">= 7.7.0",

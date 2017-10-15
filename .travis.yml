@@ -6,9 +6,3 @@ notifications:
   disabled: true
 before_install:
 - npm install -g npm@5
-- npm install -g greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
-env:
-  global:
-    secure: ZeuqBBp1pmLvWiQJqtrGd/+SWL46JYCDCuR5N6IWQI/a9/LFvpa4o+GPsIEGHuvFPPmV0GN0mDY9LyxgsxV3iA/ha6dTGaUuHHzd8O03dqEPi6vTcDrE1XWFji+PPBksFx3Cv7DCRKaFYqp2CypRDO4vs3iUpm8VltF5jLi3zcIfFuW7YGCpuqYJzHKysE5FXGLQXEbpnK9VhvZLuQA/MULUlccd7whOVLpdnoYgPX3LHoZYsy5g/DeNg79wXcDKfXPoBxoC3HuKGIqh6HGxuuHacbNWg6R3x+YPr6/78nlX51H44TGtrNptlRW0ELTZQ9N8+aDpXh/gf2/768tBposX7wlMHg+KM6b82ncLwYUGc3TVgtGF4OofMiSCsm0Bms+fy6F9EsN5fLQO2SeCZupOfS/w/c2+qVcuMXgydMtmcy75snPAhdME8sozP7/CfFI5BmCPs6H/CKJc7DcHrnunlpubXnFvCxEuOF2RV2aGwIMa8a+KkgRNGr2eV0lyqTpxE5Czg3H+jZqg8isqEe7OilpDIyjvgNXw81hgEE1oC3cDNB3zxEuPTuSz/LJWRkxxgbr36jiyqsdyHwSxDMxOTDJbZ6FuzZ+FtUK2DTzAFUARDvDyVmFcgLvfw1syVcZef+wOSRTuEDQKRjjveKVMN2l2mEcI2s4eIhRUlQE=

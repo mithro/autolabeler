@@ -15,7 +15,7 @@
     "probot": "^4.0.0"
   },
   "devDependencies": {
-    "expect": "^1.20.2",
+    "expect": "^22.0.0",
     "localtunnel": "^1.8.2",
     "mocha": "^3.2.0",
     "standard": "^10.0.3"

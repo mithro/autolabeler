@@ -6,7 +6,7 @@
 
 ## Using
 
-Configure by creating a `.github/.github/autolabeler.yml` file with a yaml file in the format of `label: file/path`. 
+Configure by creating a `.github/autolabeler.yml` file with a yaml file in the format of `label: file/path`. 
 
 For example,
 ```yaml

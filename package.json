@@ -1,7 +1,7 @@
 {
   "name": "probot-labeler",
   "version": "1.0.0",
-  "description": "{{{ description }}}",
+  "description": "A GitHub App built with probot that adds labels to Pull Requests based on matched file patterns.",
   "author": "Brandon Keepers",
   "license": "ISC",
   "repository": "https://github.com/probot/labeler.git",

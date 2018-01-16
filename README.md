@@ -1,8 +1,8 @@
-# {{ name }}
+# Probot Auto Labeler
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/probot/autolabeler.svg)](https://greenkeeper.io/)
 
-> a GitHub App built with [probot](https://github.com/probot/probot) that {{ description }}
+> a GitHub App built with [probot](https://github.com/probot/probot) that adds labels to Pull Requests based on matched file patterns.
 
 ## Setup
 

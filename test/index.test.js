@@ -1,4 +1,3 @@
-const expect = require('expect')
 const {createRobot} = require('probot')
 const plugin = require('..')
 
@@ -23,7 +22,7 @@ describe('autolabeler', () => {
     github = {
       repos: {
         // Response for getting content from '.github/ISSUE_REPLY_TEMPLATE.md'
-        getContent: expect.createSpy().andReturn(Promise.resolve({
+        getContent: jest.fn().mockImplementation(() => Promise.resolve({
           data: {
             content: Buffer.from(config).toString('base64')
           }
@@ -31,16 +30,16 @@ describe('autolabeler', () => {
       },
 
       pullRequests: {
-        getFiles: expect.createSpy().andReturn({
+        getFiles: jest.fn().mockImplementation(() => ({
           data: [
             {filename: 'test.txt'},
             {filename: '.github/autolabeler.yml'}
           ]
-        })
+        }))
       },
 
       issues: {
-        addLabels: expect.createSpy()
+        addLabels: jest.fn()
       }
     }
 
@@ -51,7 +50,7 @@ describe('autolabeler', () => {
   describe('pull_request.opened event', () => {
     const event = require('./fixtures/pull_request.opened')
 
-    it('adds label', async () => {
+    test('adds label', async () => {
       await robot.receive(event)
 
       expect(github.repos.getContent).toHaveBeenCalledWith({

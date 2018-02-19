@@ -18,7 +18,7 @@
     "expect": "^1.20.2",
     "mocha": "^3.2.0",
     "smee-client": "^1.0.1",
-    "standard": "^10.0.3"
+    "standard": "^11.0.0"
   },
   "standard": {
     "env": [

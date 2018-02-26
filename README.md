@@ -6,7 +6,7 @@
 
 ## Using
 
-Configure by creating a `.github/autolabeler.yml` file with a [yaml file](https://en.wikipedia.org/wiki/YAML) in the format of `label: file/path`. Then add the [Probot Auto Labeler Bot](https://github.com/apps/probot-autolabeler) to your repository.
+Configure by creating a `.github/autolabeler.yml` file with a [YAML file](https://en.wikipedia.org/wiki/YAML) in the format of `label: file/path`. Then add the [Probot Auto Labeler Bot](https://github.com/apps/probot-autolabeler) to your repository.
 
 For example,
 

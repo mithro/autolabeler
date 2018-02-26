@@ -1,0 +1,6 @@
+tests: ["test"]
+docs: ["*.md", "docs/", "LICENSE"]
+config: [".github", ".travis*"]
+
+# Pull request has files in it that it shouldn't!
+broken: ["*.pem", "*-lock.json", "*.pem", "node_modules", ".env"]

@@ -12,7 +12,8 @@ module.exports = robot => {
     const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
 
     const files = await context.github.pullRequests.getFiles(context.issue())
-    const currentLabels = new Set((await context.github.issues.getIssueLabels(context.issue())).data.map((label) => {label.name}));
+    const currentLabelsResponse = await context.github.issues.getIssueLabels(context.issue())
+    const currentLabels = new Set(currentLabelsResponse.data.map((label) => { return label.name }))
     const changedFiles = files.data.map(file => file.filename)
     const labels = new Set()
 
@@ -25,10 +26,10 @@ module.exports = robot => {
         labels.add(label)
       }
     }
-    let labelsToAdd = [];
+    let labelsToAdd = []
     labels.forEach((label) => {
       if (!currentLabels.has(label)) {
-        labelsToAdd.push(label);
+        labelsToAdd.push(label)
       }
     })
 

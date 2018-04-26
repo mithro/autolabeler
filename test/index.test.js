@@ -39,7 +39,10 @@ describe('autolabeler', () => {
       },
 
       issues: {
-        addLabels: jest.fn()
+        addLabels: jest.fn(),
+        getIssueLabels: jest.fn().mockImplementation(() => Promise.resolve({
+          data: [{name: 'config'}]
+        }))
       }
     }
 
@@ -63,7 +66,7 @@ describe('autolabeler', () => {
         owner: 'robotland',
         repo: 'test',
         number: 98,
-        labels: ['test', 'config']
+        labels: ['test']
       })
     })
   })

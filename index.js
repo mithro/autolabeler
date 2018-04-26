@@ -12,8 +12,8 @@ module.exports = robot => {
     const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
 
     const files = await context.github.pullRequests.getFiles(context.issue())
+    const currentLabels = new Set((await context.github.issues.getIssueLabels(context.issue())).data.map((label) => {label.name}));
     const changedFiles = files.data.map(file => file.filename)
-
     const labels = new Set()
 
     // eslint-disable-next-line guard-for-in
@@ -25,8 +25,12 @@ module.exports = robot => {
         labels.add(label)
       }
     }
-
-    const labelsToAdd = Array.from(labels)
+    let labelsToAdd = [];
+    labels.forEach((label) => {
+      if (!currentLabels.has(label)) {
+        labelsToAdd.push(label);
+      }
+    })
 
     robot.log('Adding labels', labelsToAdd)
     if (labelsToAdd.length > 0) {

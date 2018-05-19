@@ -21,7 +21,8 @@ Then if a pull request is opened that has `scripts/widget.js` modified, then the
 
 ##### Issues with Bot
 
-If you are having issues with the GitHub app not working, please contact [@mithro](mailto:me@mith.ro?subject=Issue%20with%20Probot%20Auto%20Labeler) who is running that.
+If you are having issues with [the GitHub app not working](https://github.com/apps/probot-autolabeler), please [open an issue](https://github.com/probot/autolabeler/issues).
+
 
 ## Setup
 

@@ -12,7 +12,7 @@
   "dependencies": {
     "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "probot": "^5.0.0"
+    "probot": "^7.0.0"
   },
   "devDependencies": {
     "jest": "^22.2.2",

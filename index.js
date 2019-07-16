@@ -11,8 +11,8 @@ module.exports = robot => {
     }))
     const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
 
-    const files = await context.github.pullRequests.getFiles(context.issue())
-    const changedFiles = files.data.map(file => file.filename)
+    const githubResponse = await context.github.pullRequests.getCommits(context.issue())
+    const messages = githubResponse.map(commit => commit.commit.message)
 
     const labels = new Set()
 
@@ -21,7 +21,7 @@ module.exports = robot => {
       robot.log('looking for changes', label, config[label])
       const matcher = ignore().add(config[label])
 
-      if (changedFiles.find(file => matcher.ignores(file))) {
+      if (messages.find(message => message.match(matcher))) {
         labels.add(label)
       }
     }

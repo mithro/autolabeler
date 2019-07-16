@@ -27,5 +27,8 @@
   "engines": {
     "node": ">= 7.7.0",
     "npm": ">= 4.0.0"
+  },
+  "jest": {
+    "testURL": "http://localhost/"
   }
 }

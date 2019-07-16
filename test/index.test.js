@@ -2,9 +2,8 @@ const {createRobot} = require('probot')
 const plugin = require('..')
 
 const config = `
-test: test*
-config: .github
-frontend: ["*.js"]
+feature: feat
+documentation: doc
 `
 
 describe('autolabeler', () => {
@@ -30,12 +29,20 @@ describe('autolabeler', () => {
       },
 
       pullRequests: {
-        getFiles: jest.fn().mockImplementation(() => ({
-          data: [
-            {filename: 'test.txt'},
-            {filename: '.github/autolabeler.yml'}
+        getCommits: jest.fn().mockImplementation(() => (
+          [
+            {
+              commit: {
+                message: 'feat(feature): a commit message'
+              }
+            },
+            {
+              commit: {
+                message: 'doc(readme): a commit message'
+              }
+            }
           ]
-        }))
+        ))
       },
 
       issues: {
@@ -63,7 +70,7 @@ describe('autolabeler', () => {
         owner: 'robotland',
         repo: 'test',
         number: 98,
-        labels: ['test', 'config']
+        labels: ['feature', 'documentation']
       })
     })
   })

@@ -1,0 +1,6 @@
+tests: ["test", "tests"]
+docs: ["doc", "docs"]
+chore: ["chore", "upgrade"]
+
+# Pull request has files in it that it shouldn't!
+broken: ["*.pem", "*-lock.json", "node_modules", ".env"]

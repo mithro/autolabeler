@@ -1,21 +1,25 @@
 {
-  "name": "probot-labeler",
+  "name": "commit-labeller",
   "version": "1.0.0",
   "description": "A GitHub App built with probot that adds labels to Pull Requests based on matched file patterns.",
   "author": "Brandon Keepers",
   "license": "ISC",
   "repository": "https://github.com/probot/labeler.git",
   "scripts": {
+    "dev": "nodemon",
+    "lint": "standard --fix",
     "start": "probot run ./index.js",
-    "test": "jest && standard"
+    "test": "jest && standard",
+    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
     "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "probot": "^5.0.0"
+    "probot": "^7.2.0"
   },
   "devDependencies": {
     "jest": "^22.2.2",
+    "nodemon": "^1.17.2",
     "smee-client": "^1.0.1",
     "standard": "^11.0.0"
   },
@@ -25,8 +29,14 @@
     ]
   },
   "engines": {
-    "node": ">= 7.7.0",
-    "npm": ">= 4.0.0"
+    "node": ">= 8.3.0"
+  },
+  "nodemonConfig": {
+    "exec": "npm start",
+    "watch": [
+      ".env",
+      "."
+    ]
   },
   "jest": {
     "testURL": "http://localhost/"

@@ -2,7 +2,7 @@ const {createRobot} = require('probot')
 const plugin = require('..')
 
 const config = `
-feature: feat
+feature: ["feat", "ft"]
 documentation: doc
 `
 

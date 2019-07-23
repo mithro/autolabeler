@@ -2,8 +2,10 @@ const { Application } = require('probot')
 const plugin = require('..')
 
 const config = `
-feature: ["feat", "ft"]
-documentation: doc
+feature: ["feat*", "feature*"]
+bug: ["fix*", "bug*", "bugfix*"]
+maintenance: ["chore*"]
+documentation: ["doc*", "docs*"]
 `
 
 describe('autolabeler', () => {
@@ -34,12 +36,22 @@ describe('autolabeler', () => {
             data: [
               {
                 commit: {
-                  message: 'feat(feature): a commit message'
+                  message: 'feat(feature): a feature commit message'
                 }
               },
               {
                 commit: {
-                  message: 'doc(readme): a commit message'
+                  message: 'doc(readme): a documentation commit message'
+                }
+              },
+              {
+                commit: {
+                  message: 'something(random): a random commit message'
+                }
+              },
+              {
+                commit: {
+                  message: 'feat(feature): another feature commit message'
                 }
               }
             ]

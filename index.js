@@ -21,7 +21,7 @@ module.exports = robot => {
       robot.log('looking for changes', label, config[label])
       const matcher = ignore().add(config[label])
 
-      if (messages.find(message => message.match(matcher))) {
+      if (messages.find(message => matcher.ignores(message))) {
         labels.add(label)
       }
     }

@@ -12,7 +12,8 @@ module.exports = robot => {
     const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
 
     const githubResponse = await context.github.pullRequests.listCommits(context.issue())
-    const messages = githubResponse.commits.map(commit => commit.message)
+    console.log(`github response:`, JSON.stringify(githubResponse))
+    const messages = githubResponse.data.map(commit => commit.commit.message)
 
     const labels = new Set()
 

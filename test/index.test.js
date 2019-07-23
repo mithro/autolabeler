@@ -31,12 +31,16 @@ describe('autolabeler', () => {
       pullRequests: {
         listCommits: jest.fn().mockImplementation(() => (
           {
-            commits: [
+            data: [
               {
-                message: 'feat(feature): a commit message'
+                commit: {
+                  message: 'feat(feature): a commit message'
+                }
               },
               {
-                message: 'doc(readme): a commit message'
+                commit: {
+                  message: 'doc(readme): a commit message'
+                }
               }
             ]
           }

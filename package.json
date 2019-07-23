@@ -1,10 +1,10 @@
 {
   "name": "commit-labeller",
   "version": "1.0.0",
-  "description": "A GitHub App built with probot that adds labels to Pull Requests based on matched file patterns.",
+  "description": "A GitHub App built with probot that adds labels to Pull Requests based on matched commit patterns.",
   "author": "Brandon Keepers",
   "license": "ISC",
-  "repository": "https://github.com/probot/labeler.git",
+  "repository": "https://github.com/explaura/autolabeler.git",
   "scripts": {
     "dev": "nodemon",
     "lint": "standard --fix",

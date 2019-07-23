@@ -29,7 +29,7 @@ describe('autolabeler', () => {
       },
 
       pullRequests: {
-        getCommits: jest.fn().mockImplementation(() => (
+        listCommits: jest.fn().mockImplementation(() => (
           {
             commits: [
               {

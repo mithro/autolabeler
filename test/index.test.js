@@ -1,4 +1,4 @@
-const {createRobot} = require('probot')
+const { Application } = require('probot')
 const plugin = require('..')
 
 const config = `
@@ -7,15 +7,15 @@ documentation: doc
 `
 
 describe('autolabeler', () => {
-  let robot
+  let app
   let github
 
   beforeEach(() => {
-    // Create a new Robot to run our plugin
-    robot = createRobot()
+    // Create a new App to run our plugin
+    app = new Application()
 
     // Load the plugin
-    plugin(robot)
+    plugin(app)
 
     // Mock out the GitHub API
     github = {
@@ -53,14 +53,14 @@ describe('autolabeler', () => {
     }
 
     // Mock out GitHub App authentication and return our mock client
-    robot.auth = () => Promise.resolve(github)
+    app.auth = () => Promise.resolve(github)
   })
 
   describe('pull_request.opened event', () => {
     const event = require('./fixtures/pull_request.opened')
 
     test('adds label', async () => {
-      await robot.receive(event)
+      await app.receive(event)
 
       expect(github.repos.getContent).toHaveBeenCalledWith({
         owner: 'robotland',

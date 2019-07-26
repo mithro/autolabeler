@@ -1,18 +1,17 @@
 {
-  "name": "probot-labeler",
+  "name": "probot-sizelabeler",
   "version": "1.0.0",
-  "description": "A GitHub App built with probot that adds labels to Pull Requests based on matched file patterns.",
-  "author": "Brandon Keepers",
+  "description": "A GitHub App built with probot that adds labels to Pull Requests based on size (number of added/deleted lines).",
+  "author": "Greg Lockwood",
   "license": "ISC",
-  "repository": "https://github.com/probot/labeler.git",
+  "repository": "https://github.com/greglockwood/sizelabeler.git",
   "scripts": {
     "start": "probot run ./index.js",
     "test": "jest && standard"
   },
   "dependencies": {
-    "ignore": "^3.3.3",
     "js-yaml": "^3.9.0",
-    "probot": "^5.0.0"
+    "probot": "^9.2.20"
   },
   "devDependencies": {
     "jest": "^22.2.2",

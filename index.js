@@ -54,6 +54,10 @@ module.exports = robot => {
       } else if (!passes && existingLabels.has(label)) {
         labelsToRemove.add(label);
       }
+      if (passes && config[label].terminal) {
+        robot.log('Skipping remaining rules.');
+        break;
+      }
     }
 
     if (labelsToRemove.size > 0) {

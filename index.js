@@ -4,6 +4,7 @@ const ignore = require('ignore')
 module.exports = robot => {
   robot.on('pull_request.opened', autolabel)
   robot.on('pull_request.synchronize', autolabel)
+  robot.on('pull_request.reopened', autolabel)
 
   async function autolabel (context) {
     const content = await context.github.repos.getContent(context.repo({

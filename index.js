@@ -4,6 +4,7 @@ const ignore = require('ignore')
 module.exports = ({ app }) => {
   app.on('pull_request.opened', autolabel)
   app.on('pull_request.synchronize', autolabel)
+  app.on('pull_request.reopened', autolabel)
 
   async function autolabel (context) {
     const content = await context.octokit.repos.getContent(

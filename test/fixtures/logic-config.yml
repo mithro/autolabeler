@@ -1,0 +1,7 @@
+xs:
+  or:
+    -
+      max_additions: 10
+      max_deletions: 10
+    -
+      max_deletions: 20

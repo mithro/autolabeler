@@ -1,70 +1,40 @@
-const {createRobot} = require('probot')
-const plugin = require('..')
+const nock = require('nock')
+// Requiring our app implementation
+const myProbotApp = require('..')
+const { Probot } = require('probot')
 
-const config = `
-test: test*
-config: .github
-frontend: ["*.js"]
-`
+nock.disableNetConnect();
 
-describe('autolabeler', () => {
-  let robot
-  let github
+// TODO: Fix this test, it seems to be passing when it shouldn't.
+
+describe('sizelabeler', () => {
+  let probot;
 
   beforeEach(() => {
-    // Create a new Robot to run our plugin
-    robot = createRobot()
+    probot = new Probot({});
+    // Load our app into probot
+    const app = probot.load(myProbotApp);
 
-    // Load the plugin
-    plugin(robot)
-
-    // Mock out the GitHub API
-    github = {
-      repos: {
-        // Response for getting content from '.github/ISSUE_REPLY_TEMPLATE.md'
-        getContent: jest.fn().mockImplementation(() => Promise.resolve({
-          data: {
-            content: Buffer.from(config).toString('base64')
-          }
-        }))
-      },
-
-      pullRequests: {
-        getFiles: jest.fn().mockImplementation(() => ({
-          data: [
-            {filename: 'test.txt'},
-            {filename: '.github/autolabeler.yml'}
-          ]
-        }))
-      },
-
-      issues: {
-        addLabels: jest.fn()
-      }
-    }
-
-    // Mock out GitHub App authentication and return our mock client
-    robot.auth = () => Promise.resolve(github)
-  })
+    // just return a test token
+    app.app = () => 'test';
+  });
 
   describe('pull_request.opened event', () => {
     const event = require('./fixtures/pull_request.opened')
 
     test('adds label', async () => {
-      await robot.receive(event)
+      nock('https://api.github.com')
+            .post('/app/installations/2/access_tokens')
+            .reply(200, { token: 'test' })
 
-      expect(github.repos.getContent).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        path: '.github/autolabeler.yml'
-      })
+      nock('https://api.github.com')
+       .post('/repos/robotland/test/issues/98/labels', (body) => {
+         expect(body).toMatchObject({ labels: ['sm', 'foo'] });
+         return true;
+       })
+       .reply(200);
 
-      expect(github.issues.addLabels).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        number: 98,
-        labels: ['test', 'config']
-      })
-    })
-  })
-})
+      await probot.receive({ name: 'pull_request', payload: event });
+    });
+  });
+});

@@ -10,14 +10,14 @@
     "test": "jest && standard"
   },
   "dependencies": {
-    "ignore": "^3.3.3",
+    "ignore": "^5.1.4",
     "js-yaml": "^3.9.0",
-    "probot": "^6.0.0"
+    "probot": "^9.5.0"
   },
   "devDependencies": {
-    "jest": "^22.2.2",
+    "jest": "^24.9.0",
     "smee-client": "^1.0.1",
-    "standard": "^11.0.0"
+    "standard": "^14.3.1"
   },
   "standard": {
     "env": [

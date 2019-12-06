@@ -6,12 +6,12 @@ module.exports = robot => {
   robot.on('pull_request.synchronize', autolabel)
 
   async function autolabel (context) {
-    const content = await context.github.repos.getContent(context.repo({
+    const content = await context.github.repos.getContents(context.repo({
       path: '.github/autolabeler.yml'
     }))
     const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
 
-    const files = await context.github.pullRequests.getFiles(context.issue())
+    const files = await context.github.pulls.listFiles(context.issue())
     const changedFiles = files.data.map(file => file.filename)
 
     const labels = new Set()

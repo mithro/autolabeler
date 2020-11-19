@@ -1,38 +1,44 @@
-const yaml = require('js-yaml')
-const ignore = require('ignore')
+const yaml = require("js-yaml");
+const ignore = require("ignore");
 
-module.exports = robot => {
-  robot.on('pull_request.opened', autolabel)
-  robot.on('pull_request.synchronize', autolabel)
+module.exports = ({ app }) => {
+  app.on("pull_request.opened", autolabel);
+  app.on("pull_request.synchronize", autolabel);
 
-  async function autolabel (context) {
-    const content = await context.github.repos.getContent(context.repo({
-      path: '.github/autolabeler.yml'
-    }))
-    const config = yaml.safeLoad(Buffer.from(content.data.content, 'base64').toString())
+  async function autolabel(context) {
+    const content = await context.octokit.repos.getContent(
+      context.repo({
+        path: ".github/autolabeler.yml",
+      })
+    );
+    const config = yaml.safeLoad(
+      Buffer.from(content.data.content, "base64").toString()
+    );
 
-    const files = await context.github.pullRequests.getFiles(context.issue())
-    const changedFiles = files.data.map(file => file.filename)
+    const files = await context.octokit.pulls.listFiles(context.issue());
+    const changedFiles = files.data.map((file) => file.filename);
 
-    const labels = new Set()
+    const labels = new Set();
 
     // eslint-disable-next-line guard-for-in
     for (const label in config) {
-      robot.log('looking for changes', label, config[label])
-      const matcher = ignore().add(config[label])
+      app.log("looking for changes", label, config[label]);
+      const matcher = ignore().add(config[label]);
 
-      if (changedFiles.find(file => matcher.ignores(file))) {
-        labels.add(label)
+      if (changedFiles.find((file) => matcher.ignores(file))) {
+        labels.add(label);
       }
     }
 
-    const labelsToAdd = Array.from(labels)
+    const labelsToAdd = Array.from(labels);
 
-    robot.log('Adding labels', labelsToAdd)
+    app.log("Adding labels", labelsToAdd);
     if (labelsToAdd.length > 0) {
-      return context.github.issues.addLabels(context.issue({
-        labels: labelsToAdd
-      }))
+      return context.octokit.issues.addLabels(
+        context.issue({
+          labels: labelsToAdd,
+        })
+      );
     }
   }
-}
+};

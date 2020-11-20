@@ -1,4 +1,5 @@
-const {createRobot} = require('probot')
+const { Probot, ProbotOctokit } = require('probot')
+const nock = require('nock')
 const plugin = require('..')
 
 const config = `
@@ -8,63 +9,49 @@ frontend: ["*.js"]
 `
 
 describe('autolabeler', () => {
-  let robot
-  let github
+  let probot
 
   beforeEach(() => {
-    // Create a new Robot to run our plugin
-    robot = createRobot()
+    nock.disableNetConnect()
+    probot = new Probot({
+      id: 1,
+      githubToken: 'test',
+      // Disable throttling & retrying requests for easier testing
+      Octokit: ProbotOctokit.defaults({
+        retry: { enabled: false },
+        throttle: { enabled: false }
+      })
+    })
+    probot.load(plugin)
+  })
 
-    // Load the plugin
-    plugin(robot)
-
-    // Mock out the GitHub API
-    github = {
-      repos: {
-        // Response for getting content from '.github/ISSUE_REPLY_TEMPLATE.md'
-        getContent: jest.fn().mockImplementation(() => Promise.resolve({
-          data: {
-            content: Buffer.from(config).toString('base64')
-          }
-        }))
-      },
-
-      pullRequests: {
-        getFiles: jest.fn().mockImplementation(() => ({
-          data: [
-            {filename: 'test.txt'},
-            {filename: '.github/autolabeler.yml'}
-          ]
-        }))
-      },
-
-      issues: {
-        addLabels: jest.fn()
-      }
-    }
-
-    // Mock out GitHub App authentication and return our mock client
-    robot.auth = () => Promise.resolve(github)
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
   })
 
   describe('pull_request.opened event', () => {
     const event = require('./fixtures/pull_request.opened')
 
     test('adds label', async () => {
-      await robot.receive(event)
+      // Test that we correctly return a test token
+      nock('https://api.github.com')
+        .get('/repos/robotland/test/contents/.github%2Fautolabeler.yml')
+        .reply(200, {
+          content: Buffer.from(config, 'utf-8').toString('base64')
+        })
+        .get('/repos/robotland/test/pulls//files?issue_number=98')
+        .reply(200, [
+          { filename: 'test.txt' },
+          { filename: '.github/autolabeler.yml' }
+        ])
+        .post('/repos/robotland/test/issues/98/labels', (body) => {
+          expect(body).toEqual(['test', 'config'])
+          return true
+        })
+        .reply(200)
 
-      expect(github.repos.getContent).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        path: '.github/autolabeler.yml'
-      })
-
-      expect(github.issues.addLabels).toHaveBeenCalledWith({
-        owner: 'robotland',
-        repo: 'test',
-        number: 98,
-        labels: ['test', 'config']
-      })
+      await probot.receive(event)
     })
   })
 })

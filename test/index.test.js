@@ -40,7 +40,7 @@ describe('autolabeler', () => {
         .reply(200, {
           content: Buffer.from(config, 'utf-8').toString('base64')
         })
-        .get('/repos/robotland/test/pulls//files?issue_number=98')
+        .get('/repos/robotland/test/pulls/98/files')
         .reply(200, [
           { filename: 'test.txt' },
           { filename: '.github/autolabeler.yml' }

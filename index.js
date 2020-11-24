@@ -16,7 +16,7 @@ module.exports = ({ app }) => {
       Buffer.from(content.data.content, 'base64').toString()
     )
 
-    const files = await context.octokit.pulls.listFiles(context.issue())
+    const files = await context.octokit.pulls.listFiles(context.pullRequest())
     const changedFiles = files.data.map((file) => file.filename)
 
     const labels = new Set()

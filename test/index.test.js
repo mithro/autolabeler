@@ -46,7 +46,7 @@ describe('autolabeler', () => {
           { filename: '.github/autolabeler.yml' }
         ])
         .post('/repos/robotland/test/issues/98/labels', (body) => {
-          expect(body).toEqual(['test', 'config'])
+          expect(body).toEqual({ labels: ['test', 'config'] })
           return true
         })
         .reply(200)

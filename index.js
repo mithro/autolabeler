@@ -1,7 +1,7 @@
 const yaml = require('js-yaml')
 const ignore = require('ignore')
 
-module.exports = ({ app }) => {
+module.exports = (app) => {
   app.on('pull_request.opened', autolabel)
   app.on('pull_request.synchronize', autolabel)
   app.on('pull_request.reopened', autolabel)
